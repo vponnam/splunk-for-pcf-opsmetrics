@@ -72,7 +72,7 @@
       <option name="table.drilldown">all</option>
       <option name="table.wrap">1</option>
       <option name="type">list</option>
-      <fields>["host","source","sourcetype"]</fields>
+      <fields>["jvmDescription","source","sourcetype"]</fields>
     </chart>
   </row>
   <row>
