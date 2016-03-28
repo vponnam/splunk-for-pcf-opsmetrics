@@ -1,0 +1,16 @@
+<panel>
+  <title>JMX - JVM Uptime Top 10</title>
+  <chart>
+    <search>
+      <query>
+      <![CDATA[
+               sourcetype=jmx mbean_domain="java.lang" mbean_property_type="Runtime" |eval startedAt_secs=floor(start_time/1000)          | eval formattedJVMStartTime=strftime(startedAt_secs,"%H:%M:%S %d %B %Y")          | stats first(product) as jvmName first(version) as jvmVersion first(vendor) as jvmVendor first(process_name) as jvmProcessName first(formattedJVMStartTime) as formattedJVMStartTime max(eval(uptime/1000/60)) as jvmUptimeMinutes by host jvmDescription |   stats max(jvmUptimeMinutes) as jvmUptimeMinutes by  host  jvmDescription | sort 10 -jvmUptimeMinutes | chart max(jvmUptimeMinutes) as "Uptime in Minutes" by jvmDescription host
+            ]]>  
+      </query>
+      <earliest>-1d</earliest>
+      <latest></latest>
+    </search>
+    <option name="charting.chart">bar</option>
+    <option name="charting.axisTitleY.text">Time (Minutes)</option>
+  </chart>
+</panel>

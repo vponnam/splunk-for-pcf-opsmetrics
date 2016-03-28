@@ -1,0 +1,12 @@
+<panel>
+  <title>JMX - Memory Pool Overview</title>
+  <table>
+    <search>
+    	<query>
+    	sourcetype=jmx mbean_domain="java.lang" mbean_property_type="MemoryPool"         | bucket _time span=1m         | stats first(Type) as memoryType first(MemoryManagerNames) as memManagerNames first(Usage.max) as usageMax first(Usage.init) as usageInit first(Usage.used) as usageUsed first(Usage.committed) as usageCommitted by _time host jvmDescription Name |                 stats first(memoryType) as "Type" first(memManagerNames) as "Memory Managers" first(usageMax) as "Max (Bytes)" first(usageInit) as "Init (Bytes)" first(usageCommitted) as "Committed (Bytes)" by host jvmDescription Name | sort jvmDescription          
+      </query>
+      <earliest>-1d</earliest>
+      <latest></latest>     
+    </search>
+  </table>
+</panel>

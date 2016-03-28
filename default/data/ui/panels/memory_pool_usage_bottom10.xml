@@ -1,0 +1,18 @@
+<panel>
+  <title>JMX - Memory Pool Usage Bottom 10</title>
+  <chart>
+    <search>
+      <query>
+      <![CDATA[
+                sourcetype=jmx host="*" jvmDescription="*" mbean_domain="java.lang" mbean_property_type="MemoryPool"         | bucket _time span=1m         | stats first(Type) as memoryType first(MemoryManagerNames) as memManagerNames first(Usage.max) as usageMax first(Usage.init) as usageInit first(Usage.used) as usageUsed first(Usage.committed) as usageCommitted by _time host jvmDescription Name |                 eval jvmpool=jvmDescription+"_"+Name | timechart span=2m max(usageUsed) as "Memory Used" by jvmpool     where min in bottom10         
+            ]]>  
+      </query>
+      <earliest>-1d</earliest>
+      <latest></latest>
+    </search>
+    <option name="charting.chart">line</option>
+    <option name="charting.chart.nullValueMode">connect</option>
+    <option name="charting.axisTitleX.text">Time</option>
+    <option name="charting.axisTitleY.text">Pool Memory(Bytes)</option>
+  </chart>
+</panel>

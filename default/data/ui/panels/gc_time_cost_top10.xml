@@ -1,0 +1,16 @@
+<panel>
+     <title>JMX - Last Collection Time Top 10</title>
+  <chart>
+    <search>
+      <query>
+     sourcetype=jmx mbean_domain="java.lang" mbean_property_type="GarbageCollector"         | eval jvmgc=jvmDescription+"_"+Name         | streamstats current=f global=f window=1 first(CollectionCount) as next_colCount by host jvmgc         | eval d_colCount=next_colCount-CollectionCount         | eval gcFreq=if(next_colCount>CollectionCount, d_colCount, 0)          | bucket _time span=1m         | stats first(jvmgc) as jvmgc first(gcFreq) as gcFreq first(CollectionTime) as colTime first(CollectionCount) as colCount first(MemoryPoolNames) as memPools first(LastGcInfo.startTime) as gCStart first(LastGcInfo.endTime) as gCEnd first(LastGcInfo.duration) as gCDuration first(LastGcInfo.GcThreadCount) as gCThreadCount by _time host jvmDescription Name |                 timechart span=2m avg(gCDuration) by jvmgc   where max in top10
+      </query>
+      <earliest>-1d</earliest>
+      <latest></latest>                 
+    </search>
+    <option name="charting.chart">line</option>
+    <option name="charting.chart.nullValueMode">connect</option>
+    <option name="charting.axisTitleX.text">Time</option>
+    <option name="charting.axisTitleY.text">Collection Time (Millis)</option>
+  </chart>
+</panel>

@@ -1,0 +1,12 @@
+<endpoint name="data/inputs/jmx" redirect="false" hideEnabledColumn="true" hidePermissionsColumn="true" hideActionsColumn="true">
+  <header>Manage JMX Inputs</header>
+
+  <introText>View and manage your JMX inputs in the Splunk Add-on for JMX configuration page. Click "New" to be redirected. </introText>
+
+  <elements>
+    <element name="spl-crtl_script" type="jmxtaskredirect">
+        <view name="create"/>
+        <view name="edit"/>
+    </element>
+  </elements>
+</endpoint>

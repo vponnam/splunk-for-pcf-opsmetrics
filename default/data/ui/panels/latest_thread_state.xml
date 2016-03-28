@@ -1,0 +1,13 @@
+<panel>
+   <title>JMX - Latest Thread State</title>
+  <table>
+    <search>
+      <query>sourcetype=jmx host="*" jvmDescription="*" mbean_domain="java.lang" mbean_property_type="Threading"| bucket _time span=1m | stats max(thread_count) as currentThreads ,max(peak_thread_count) as peakThreads, max(daemon_thread_count) as daemonThreads first(threads_started) as threadsStarted earliest(current_user_time) as currentThreadUserTime earliest(current_cpu_time) as currentThreadCpuTime by _time host jvmDescription |                 stats first(threadsStarted) as "Threads Started" first(currentThreadUserTime) as "Current Thread User Time" first(currentThreadCpuTime) as "Current Thread  CPU Time" first(currentThreads) as "Thread Count" first(peakThreads) as "Peak Thread Count" first(daemonThreads) as "Daemon Thread Count" by host jvmDescription</query>
+      <earliest>-1d</earliest>
+      <latest></latest>
+    </search>
+    <option name="wrap">true</option>
+    <option name="rowNumbers">true</option>
+    <option name="dataOverlayMode">none</option>
+  </table>
+</panel>

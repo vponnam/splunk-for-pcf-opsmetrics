@@ -1,0 +1,15 @@
+<panel>
+    <title>JMX - Compilation Time by JVM and Host Top 10</title>
+  <chart>
+    <search>
+      <query>
+sourcetype=jmx mbean_domain="java.lang" mbean_property_type="Compilation" | stats first(compilation_time) as compilation_time by host jvmDescription | sort 10 -compilation_time | chart first(compilation_time) as "Compilation Time"  by  jvmDescription host
+      </query>
+      <earliest>-1d</earliest>
+      <latest></latest>
+    </search>
+    <option name="charting.chart">bar</option>
+    <option name="charting.axisTitleX.text">Host</option>
+    <option name="charting.axisTitleY.text">Compilation Time (Millis)</option>
+  </chart>
+</panel>

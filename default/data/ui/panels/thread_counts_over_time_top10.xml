@@ -1,0 +1,16 @@
+<panel>
+  <title>JMX - Thread Counts over Time Top 10</title>
+  <chart>
+    <search>
+      <query>
+      sourcetype=jmx host="*" jvmDescription="*" mbean_domain="java.lang" mbean_property_type="Threading"| bucket _time span=1m | stats max(thread_count) as currentThreads ,max(peak_thread_count) as peakThreads, max(daemon_thread_count) as daemonThreads first(threads_started) as threadsStarted earliest(current_user_time) as currentThreadUserTime earliest(current_cpu_time) as currentThreadCpuTime by _time host jvmDescription |                 timechart span=2m max(currentThreads) as "Current Threads" by jvmDescription where max in top10
+      </query>
+      <earliest>-1d</earliest>
+      <latest></latest>
+    </search>
+    <option name="charting.chart">line</option>
+    <option name="charting.chart.nullValueMode">connect</option>
+    <option name="charting.axisTitleX.text">Time</option>
+    <option name="charting.axisTitleY.text">Threads</option>
+  </chart>
+</panel>
