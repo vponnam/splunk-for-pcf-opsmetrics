@@ -1,13 +1,32 @@
 <nav search_view="search" color="#65A637">
+  <view name="pcf_health" default="true" label="Overall Health" />
 
-<collection label="Configurations">
-  <view name="Servers" default="true" label="Server" />
-  <view name="Templates" default="false" label="Templates" />
-  <view name="Tasks" default="false" label="Task" />
-</collection>
+  <collection label="OS Metrics">
+    <view name="os_metrics" />
+  </collection>
 
-<view name="search" default="false" label="Search" />
+  <collection label="Component Specific Metrics">
+    <view name="component_metrics_cc" />
+    <view name="component_metrics_dea" />
+    <view name="component_metrics_diego" />
+    <view name="component_metrics_hm9000" />
+    <view name="component_metrics_router" />
+    <view name="component_metrics_collector" />
+    <view name="component_metrics_etcd" />
+    <view name="component_metrics_logtcc" />
+    <view name="component_metrics_logsrv" />
+    <view name="component_metrics_logdea" />
+  </collection>
 
+  <collection label="Reports">
+    <view name="apps_instances" />
+  </collection>
 
-   
+  <collection label="Configurations">
+    <view name="Servers" default="true" label="Server" />
+    <view name="Templates" default="false" label="Templates" />
+    <view name="Tasks" default="false" label="Task" />
+  </collection>
+
+  <view name="search" default="false" label="Search" />
 </nav>

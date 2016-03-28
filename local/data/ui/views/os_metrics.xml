@@ -1,0 +1,185 @@
+<?xml version="1.0"?><form>
+  <label>System Metrics</label>
+  <fieldset autoRun="true">
+    <input type="dropdown" token="jvmDescription">
+      <label>Choose JVM Description</label>
+      <prefix>jvmDescription="</prefix>
+      <suffix>"</suffix>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <populatingSearch fieldForValue="jvmDescription" fieldForLabel="jvmDescription" earliest="-1d@d" latest="now">
+        <![CDATA[index=main | dedup jvmDescription | table jvmDescription]]>
+      </populatingSearch>
+    </input>
+    <input type="time">
+      <default>
+        <earliestTime>rt-1h</earliestTime>
+        <latestTime>rt</latestTime>
+      </default>
+    </input>
+  </fieldset>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index system.disk.system.percent system.disk.ephemeral.percent system.disk.persistent.percent system.cpu.sys system.cpu.user system.swap.percent system.mem.percent</searchTemplate>
+  <row>
+    <chart>
+      <title>System Disk Percentage Used</title>
+      <searchPostProcess>timechart avg(system.disk.system.percent) as "Persistent Disk Percentage" by job_and_index useother=f limit=100</searchPostProcess>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">connect</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="count">10</option>
+      <option name="list.drilldown">full</option>
+      <option name="list.wrap">1</option>
+      <option name="maxLines">5</option>
+      <option name="raw.drilldown">full</option>
+      <option name="rowNumbers">0</option>
+      <option name="table.drilldown">1</option>
+      <option name="table.wrap">1</option>
+      <option name="type">list</option>
+      <fields>["jvmDescription","source","sourcetype"]</fields>
+      <option name="charting.axisTitleY.text">Percentage</option>
+      <option name="charting.axisTitleX.text">Time</option>
+    </chart>
+  </row>
+  <row>
+    <chart>
+      <title>Ephemeral System Disk Percentage Used</title>
+      <searchPostProcess>timechart avg(system.disk.ephemeral.percent) as "Ephemeral Disk Percentage" by job_and_index useother=f limit=100</searchPostProcess>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">connect</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="count">10</option>
+      <option name="list.drilldown">full</option>
+      <option name="list.wrap">1</option>
+      <option name="maxLines">5</option>
+      <option name="raw.drilldown">full</option>
+      <option name="rowNumbers">0</option>
+      <option name="table.drilldown">1</option>
+      <option name="table.wrap">1</option>
+      <option name="type">list</option>
+      <fields>["jvmDescription","source","sourcetype"]</fields>
+      <option name="charting.axisTitleY.text">Percentage</option>
+      <option name="charting.axisTitleX.text">Time</option>
+    </chart>
+  </row>
+  <row>
+    <chart>
+      <title>CPU Used</title>
+      <searchPostProcess>timechart avg(system.cpu.sys) as "System CPU" avg(system.cpu.user) as "User CPU" by job_and_index useother=f limit=100</searchPostProcess>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">connect</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="count">10</option>
+      <option name="list.drilldown">full</option>
+      <option name="list.wrap">1</option>
+      <option name="maxLines">5</option>
+      <option name="raw.drilldown">full</option>
+      <option name="rowNumbers">0</option>
+      <option name="table.drilldown">1</option>
+      <option name="table.wrap">1</option>
+      <option name="type">list</option>
+      <fields>["jvmDescription","source","sourcetype"]</fields>
+      <option name="charting.axisTitleY.text">Percentage</option>
+      <option name="charting.axisTitleX.text">Time</option>
+    </chart>
+  </row>
+  <row>
+    <chart>
+      <title>Swap Percentage Used</title>
+      <searchPostProcess>timechart avg(system.swap.percent) as "Swap Percentage" by job_and_index useother=f limit=100</searchPostProcess>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">connect</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="count">10</option>
+      <option name="list.drilldown">full</option>
+      <option name="list.wrap">1</option>
+      <option name="maxLines">5</option>
+      <option name="raw.drilldown">full</option>
+      <option name="rowNumbers">0</option>
+      <option name="table.drilldown">1</option>
+      <option name="table.wrap">1</option>
+      <option name="type">list</option>
+      <fields>["jvmDescription","source","sourcetype"]</fields>
+      <option name="charting.axisTitleY.text">Percentage</option>
+      <option name="charting.axisTitleX.text">Time</option>
+    </chart>
+  </row>
+  <row>
+    <chart>
+      <title>Percentage Memory Used</title>
+      <searchPostProcess>timechart avg(system.mem.percent) as "Memory Used" by job_and_index useother=f limit=100</searchPostProcess>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">connect</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="count">10</option>
+      <option name="list.drilldown">full</option>
+      <option name="list.wrap">1</option>
+      <option name="maxLines">5</option>
+      <option name="raw.drilldown">full</option>
+      <option name="rowNumbers">0</option>
+      <option name="table.drilldown">1</option>
+      <option name="table.wrap">1</option>
+      <option name="type">list</option>
+      <fields>["jvmDescription","source","sourcetype"]</fields>
+      <option name="charting.axisTitleY.text">Percentage</option>
+      <option name="charting.axisTitleX.text">Time</option>
+    </chart>
+  </row>
+</form>
