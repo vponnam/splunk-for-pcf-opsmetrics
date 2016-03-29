@@ -1,5 +1,5 @@
 <?xml version="1.0"?><form>
-  <label>Health</label>
+  <label>CF Health</label>
   <fieldset autoRun="true">
     <input type="dropdown" token="jvmDescription">
       <label>Choose JVM Description</label>
@@ -18,11 +18,11 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="null" | eval job_and_index = mbean_property_job + ":" + mbean_property_index | fields job_and_index system.healthy</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" OR "cf" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index healthy system.healthy</searchTemplate>
   <row>
     <chart>
-      <title>System Health</title>
-      <searchPostProcess>timechart avg(system.healthy) as "System Health" by job_and_index useother=f limit=50</searchPostProcess>
+      <title>CF Health</title>
+      <searchPostProcess>timechart avg(healthy) as "CF Health" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.chart">line</option>
@@ -43,6 +43,7 @@
       <fields>["jvmDescription","source","sourcetype"]</fields>
       <option name="charting.axisTitleY.text">Healthy</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="height">600</option>
     </chart>
   </row>
 </form>
