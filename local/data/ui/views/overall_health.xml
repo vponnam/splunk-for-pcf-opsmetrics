@@ -1,5 +1,23 @@
 <dashboard>
-  <label>Frontend_Health</label>
+  <label>Overall Health</label>
+  <fieldset autoRun="true">
+    <input type="dropdown" token="jvmDescription">
+      <label>Choose JVM Description</label>
+      <prefix>jvmDescription="</prefix>
+      <suffix>"</suffix>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <populatingSearch fieldForValue="jvmDescription" fieldForLabel="jvmDescription" earliest="-1d@d" latest="now">
+        <![CDATA[index=main | dedup jvmDescription | table jvmDescription]]>
+      </populatingSearch>
+    </input>
+    <input type="time">
+      <default>
+        <earliestTime>rt-1h</earliestTime>
+        <latestTime>rt</latestTime>
+      </default>
+    </input>
+  </fieldset>
   <row>
     <panel>
       <title>Frontend Health</title>
