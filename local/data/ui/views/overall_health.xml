@@ -1,30 +1,12 @@
 <dashboard>
   <label>Overall Health</label>
-  <fieldset autoRun="true">
-    <input type="dropdown" token="jvmDescription">
-      <label>Choose JVM Description</label>
-      <prefix>jvmDescription="</prefix>
-      <suffix>"</suffix>
-      <choice value="*">All</choice>
-      <default>*</default>
-      <populatingSearch fieldForValue="jvmDescription" fieldForLabel="jvmDescription" earliest="-1d@d" latest="now">
-        <![CDATA[index=main | dedup jvmDescription | table jvmDescription]]>
-      </populatingSearch>
-    </input>
-    <input type="time">
-      <default>
-        <earliestTime>rt-1h</earliestTime>
-        <latestTime>rt</latestTime>
-      </default>
-    </input>
-  </fieldset>
   <row>
     <panel>
       <title>Frontend Health</title>
       <single>
         <title>Router_Partition_24h</title>
         <search>
-          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*" earliest=-1d latest=now()|eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest")|bucket _time span=1d| stats avg(system.healthy) as system by _time | eval average=system*100 | table _time, average</query>
+          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*" earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>
@@ -74,7 +56,7 @@
       <single>
         <title>Router_Partition_5m</title>
         <search>
-          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*" earliest=-5m latest=now()| bucket _time span=1min| stats avg(system.healthy) as system by _time | eval average=system*100 | table _time, average</query>
+          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*" earliest=-5m latest=now() | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -124,7 +106,7 @@
       <single>
         <title>NATS_Partition_24hrs</title>
         <search>
-          <query>index = main NATS mbean_property_job="nats-partition-*" earliest=-1d latest=now()|bucket _time span=1d| stats avg(system.healthy) as system by _time | eval average=system*100 | table _time, average</query>
+          <query>index = main NATS mbean_property_job="nats-partition-*" earliest=-1d latest=now() |bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -149,7 +131,7 @@
       <single>
         <title>NATS_Partition</title>
         <search>
-          <query>index=main NATS mbean_property_job="nats-partition-*" earliest=-5m latest=now()| bucket _time span=1min| stats avg(system.healthy) as system by _time | eval average=system*100 | table _time, average</query>
+          <query>index=main NATS mbean_property_job="nats-partition-*" earliest=-5m latest=now() | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -176,7 +158,7 @@
       <single>
         <title>Diego_cell_partition_24h</title>
         <search>
-          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="diego_cell-partition-*" earliest=-1d latest=now()|eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest")|bucket _time span=1d| stats avg(system.healthy) as system by _time | eval average=system*100 | table _time, average</query>
+          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="diego_cell-partition-*" earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -201,7 +183,7 @@
       <single>
         <title>Diego_cell_partition_5m</title>
         <search>
-          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="diego_cell-partition-*" earliest=-5m latest=now()| bucket _time span=1min| stats avg(system.healthy) as system by _time | eval average=system*100 | table _time, average</query>
+          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="diego_cell-partition-*" earliest=-5m latest=now() | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -226,7 +208,7 @@
       <single>
         <title>Doppler_Partition_24hrs</title>
         <search>
-          <query>index = main doppler mbean_property_job="doppler-partition-*" earliest=-1d latest=now()|bucket _time span=1d| stats avg(system.healthy) as system by _time | eval average=system*100 | table _time, average</query>
+          <query>index = main doppler mbean_property_job="doppler-partition-*" earliest=-1d latest=now() | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -251,7 +233,7 @@
       <single>
         <title>Doppler_Partition</title>
         <search>
-          <query>index=main doppler mbean_property_job="doppler-partition-*" earliest=-5m latest=now()| bucket _time span=1min| stats avg(system.healthy) as system by _time | eval average=system*100 | table _time, average</query>
+          <query>index=main doppler mbean_property_job="doppler-partition-*" earliest=-5m latest=now() | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -277,7 +259,7 @@
       <single>
         <title>Router_request_per_sec</title>
         <search>
-          <query>index = main mbean_property_job=Router earliest=-1m latest=now()| rename "router.requests[component=CloudController]" as router_request | stats avg(router_request) as request_sent | eval request_per_second=request_sent/60 | table request_per_second</query>
+          <query>index = main mbean_property_job=Router earliest=-1m latest=now() | rename "router.requests[component=CloudController]" as router_requests | stats avg(router_requests) as requests_sent | eval requests_per_second=requests_sent/60 | table requests_per_second</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
