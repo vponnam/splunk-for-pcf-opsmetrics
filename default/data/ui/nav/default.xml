@@ -35,4 +35,5 @@
   </collection>
 
   <view name="search" default="false" label="Search" />
+  <view name="dashboards" />
 </nav>
