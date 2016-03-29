@@ -1,6 +1,6 @@
 ## Splunk Add-on for PCF Ops Metrics
 
-The Splunk Add-on for [PCF Ops Metrics](https://network.pivotal.io/products/ops-metrics) uses the *Splunk Add-on for Java Management Extensions (JMX)* to provide additional monitoring and alerting of PCF. You must [download](https://splunkbase.splunk.com/app/2647/) and configure that add-on first. Then, you can copy and paste the contents of this repository into `$SPLUNK_HOME/etc/apps/Splunk_TA_jmx` and restart Splunk.
+The Splunk Add-on for [PCF Ops Metrics](https://network.pivotal.io/products/ops-metrics) uses the *Splunk Add-on for Java Management Extensions (JMX)* to provide additional monitoring and alerting of PCF. You must [download](https://splunkbase.splunk.com/app/2647/) and [configure](http://docs.splunk.com/Documentation/AddOns/released/JMX/Configureinput) that add-on first. Then, you can copy and paste the contents of this repository into `$SPLUNK_HOME/etc/apps/Splunk_TA_jmx` and restart Splunk.
 
 __NB__ The *Splunk Add-on for JMX* is intended to replace the add-on components of *Monitoring of Java Virtual Machines with JMX*. See migration guide [here](http://docs.splunk.com/Documentation/AddOns/latest/JMX/Releasehistory) for details.
 
