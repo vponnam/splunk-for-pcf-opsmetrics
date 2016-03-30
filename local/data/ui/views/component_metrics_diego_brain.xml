@@ -18,13 +18,11 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.UnhealthyCell</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="diego_brain-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.nsync_bulker.DesiredLRPSyncDuration</searchTemplate>
   <row>
     <chart>
-      <title>Unhealthy Cells</title>
-      <search>
-        <query>timechart avg(opentsdb.nozzle.rep.UnhealthyCell) as "Unhealthy Cells" by job_and_index</query>
-      </search>
+      <title>NSYNC Bulker time</title>
+      <searchPostProcess>timechart max(opentsdb.nozzle.nsync_bulker.DesiredLRPSyncDuration) as "Desired LRP Sync Duration" by job_and_index</searchPostProcess>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
