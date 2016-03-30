@@ -3,7 +3,7 @@
 
   <collection label="Health">
     <view name="overall_health" />
-    <view name="cf_component_health" />
+    <view name="component_cf_health" />
     <view name="vm_health" />
   </collection>
 
@@ -35,4 +35,5 @@
   </collection>
 
   <view name="search" default="false" label="Search" />
+  <view name="dashboards" />
 </nav>
