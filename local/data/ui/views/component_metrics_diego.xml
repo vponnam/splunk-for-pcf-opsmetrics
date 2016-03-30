@@ -108,7 +108,7 @@
     <chart>
       <title>Missing Long Running Processes</title>
       <search>
-        <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.bbs.LRPsDesired opentsdb.nozzle.bbs.LRPsRunning opentsdb.nozzle.bbs.LRPsStarting opentsdb.nozzle.bbs.CrashedActualLRPs | timechart avg(opentsdb.nozzle.bbs.LRPsDesired) as "Desired LRPs" avg(opentsdb.nozzle.bbs.LRPsRunning) as "Running LRPs" avg(opentsdb.nozzle.bbs.LRPsStarting) as "Starting LRPs" avg(opentsdb.nozzle.bbs.CrashedActualLRPs) as "Crashed Actual LRPs" by job_and_index</query>
+        <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.bbs.LRPsDesired opentsdb.nozzle.bbs.LRPsRunning opentsdb.nozzle.bbs.LRPsClaimed opentsdb.nozzle.bbs.CrashedActualLRPs | timechart avg(opentsdb.nozzle.bbs.LRPsDesired) as "Desired LRPs" avg(opentsdb.nozzle.bbs.LRPsRunning) as "Running LRPs" avg(opentsdb.nozzle.bbs.LRPsClaimed) as "Claimed LRPs" avg(opentsdb.nozzle.bbs.CrashedActualLRPs) as "Crashed Actual LRPs" by job_and_index</query>
       </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
