@@ -8,8 +8,7 @@
       <choice value="*">All</choice>
       <default>*</default>
       <populatingSearch fieldForValue="jvmDescription" fieldForLabel="jvmDescription" earliest="-1d@d" latest="now">
-        <![CDATA[index=main sourcetype=
-jmx | dedup jvmDescription | table jvmDescription]]>
+        <![CDATA[index=main sourcetype=jmx | dedup jvmDescription | table jvmDescription]]>
       </populatingSearch>
     </input>
     <input type="time">
@@ -24,7 +23,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
     <chart>
       <title>Client Stats</title>
       <search base="global">
-        <query>timechart avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.currentBufferCount) as "Buffer Count" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedByteCount) as "Rx Bytes" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedMessageCount) as "Rx Messages" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.sentByteCount) as "Tx Bytes" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.sentMessageCount) as "Tx Messages" by job_and_index useother=f limit=51</query>
+        <query>timechart avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.currentBufferCount) as "Buffer Count" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedByteCount) as "Rx Bytes" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedMessageCount) as "Rx Messages" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.sentByteCount) as "Tx Bytes" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.sentMessageCount) as "Tx Messages" by job_and_index useother=F limit=51</query>
       </search>
       <option name="charting.chart">line</option>
       <option name="charting.chart.nullValueMode">connect</option>
@@ -56,9 +55,9 @@ jmx | dedup jvmDescription | table jvmDescription]]>
   <row>
     <chart>
       <title>GC Pause</title>
-      <searchPostProcess>eval GCPause=LoggregatorDeaAgent_memoryStats_lastGCPauseTimeNS/1000 | timechart avg(GCPause) as "GC Pause" by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg(opentsdb.nozzle.LoggregatorTrafficController.memoryStats.lastGCPauseTimeNS) as "GC Pause" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -72,23 +71,34 @@ jmx | dedup jvmDescription | table jvmDescription]]>
       <option name="charting.layout.splitSeries">0</option>
       <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
       <option name="charting.legend.placement">right</option>
-      <option name="count">10</option>
       <option name="list.drilldown">full</option>
       <option name="list.wrap">1</option>
       <option name="maxLines">5</option>
       <option name="raw.drilldown">full</option>
-      <option name="rowNumbers">0</option>
+      <option name="rowNumbers">false</option>
       <option name="table.drilldown">1</option>
       <option name="table.wrap">1</option>
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Ms</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+      <option name="wrap">true</option>
+      <option name="dataOverlayMode">none</option>
     </chart>
   </row>
   <row>
     <chart>
       <title>Go Routines</title>
-      <searchPostProcess>timechart avg(LoggregatorDeaAgent_numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(opentsdb.nozzle.LoggregatorTrafficController.numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
