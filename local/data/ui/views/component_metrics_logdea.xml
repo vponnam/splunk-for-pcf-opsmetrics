@@ -19,11 +19,13 @@ jmx | dedup jvmDescription | table jvmDescription]]>
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="LoggregatorDeaAgent" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index LoggregatorDeaAgent_numGoRoutines LoggregatorDeaAgent_loggregatorClient_currentBufferCount LoggregatorDeaAgent_loggregatorClient_receivedByteCount LoggregatorDeaAgent_loggregatorClient_receivedMessageCount LoggregatorDeaAgent_loggregatorClient_sentByteCount LoggregatorDeaAgent_loggregatorClient_sentMessageCount LoggregatorDeaAgent_memoryStats_lastGCPauseTimeNS</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "cf-*" mbean_property_job="loggregator_trafficcontroller-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.LoggregatorTrafficController.numGoRoutines opentsdb.nozzle.MetronAgent.dropsondeAgentListener.currentBufferCount opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedByteCount opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedMessageCount opentsdb.nozzle.MetronAgent.dropsondeAgentListener.sentByteCount opentsdb.nozzle.MetronAgent.dropsondeAgentListener.sentMessageCount opentsdb.nozzle.LoggregatorTrafficController.memoryStats.lastGCPauseTimeNS</searchTemplate>
   <row>
     <chart>
       <title>Client Stats</title>
-      <searchPostProcess>timechart avg(LoggregatorDeaAgent_loggregatorClient_currentBufferCount) as "Buffer Count" avg(LoggregatorDeaAgent_loggregatorClient_receivedByteCount) as "Rx Bytes" avg(LoggregatorDeaAgent_loggregatorClient_receivedMessageCount) as "Rx Messages" avg(LoggregatorDeaAgent_loggregatorClient_sentByteCount) as "Tx Bytes" avg(LoggregatorDeaAgent_loggregatorClient_sentMessageCount) as "Tx Messages" by job_and_index useother=f limit=51</searchPostProcess>
+      <search base="global">
+        <query>timechart avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.currentBufferCount) as "Buffer Count" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedByteCount) as "Rx Bytes" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedMessageCount) as "Rx Messages" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.sentByteCount) as "Tx Bytes" avg(opentsdb.nozzle.MetronAgent.dropsondeAgentListener.sentMessageCount) as "Tx Messages" by job_and_index useother=f limit=51</query>
+      </search>
       <option name="charting.chart">line</option>
       <option name="charting.chart.nullValueMode">connect</option>
       <option name="charting.axisTitleX.text">Time</option>
@@ -39,12 +41,22 @@ jmx | dedup jvmDescription | table jvmDescription]]>
       <option name="charting.layout.splitSeries">0</option>
       <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
       <option name="charting.legend.placement">right</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
   <row>
     <chart>
       <title>GC Pause</title>
-     <searchPostProcess>eval GCPause=LoggregatorDeaAgent_memoryStats_lastGCPauseTimeNS/1000 | timechart avg(GCPause) as "GC Pause" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>eval GCPause=LoggregatorDeaAgent_memoryStats_lastGCPauseTimeNS/1000 | timechart avg(GCPause) as "GC Pause" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
@@ -76,7 +88,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
   <row>
     <chart>
       <title>Go Routines</title>
-     <searchPostProcess>timechart avg(LoggregatorDeaAgent_numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(LoggregatorDeaAgent_numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
