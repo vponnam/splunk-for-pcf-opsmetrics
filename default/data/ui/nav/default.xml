@@ -14,7 +14,9 @@
   <collection label="Component Specific Metrics">
     <view name="component_metrics_cc" />
     <view name="component_metrics_dea" />
-    <view name="component_metrics_diego" />
+    <view name="component_metrics_diego_database" />
+    <view name="component_metrics_diego_cell" />
+    <view name="component_metrics_diego_brain" />
     <view name="component_metrics_hm9000" />
     <view name="component_metrics_router" />
     <view name="component_metrics_collector" />
