@@ -65,54 +65,34 @@
       </chart>
     </panel>
   </row>
-  <row>
+ <row>
     <panel>
       <title>Total Available Memory</title>
-      <chart>
+      <single>
         <title>Total memory available for all apps for the PCF installation</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | stats sum(opentsdb.nozzle.rep.CapacityRemainingMemory) as totalAvailableMemory by _time job_and_index | eval total_capacity_remaining_in_gb = totalAvailableMemory / 1024 | timechart values(total_capacity_remaining_in_gb) by job_and_index</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | stats values(opentsdb.nozzle.rep.CapacityRemainingMemory) as totalAvailableMemory by job_and_index | eval total_capacity_remaining_in_gb = totalAvailableMemory / 1000 | chart sum(total_capacity_remaining_in_gb) | addtotals</query>
+          <earliest>rt-1h</earliest>
+          <latest>rt</latest>
         </search>
-        <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.visibility">visible</option>
-        <option name="charting.axisX.scale">linear</option>
-        <option name="charting.axisY.scale">linear</option>
-        <option name="charting.chart">line</option>
-        <option name="charting.chart.nullValueMode">connect</option>
-        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
-        <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
-        <option name="list.drilldown">full</option>
-        <option name="list.wrap">1</option>
-        <option name="maxLines">5</option>
-        <option name="raw.drilldown">full</option>
-        <option name="rowNumbers">false</option>
-        <option name="table.drilldown">1</option>
-        <option name="table.wrap">1</option>
-        <option name="type">list</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleY2.visibility">visible</option>
-        <option name="charting.axisY2.enabled">0</option>
-        <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart.bubbleMaximumSize">50</option>
-        <option name="charting.chart.bubbleMinimumSize">10</option>
-        <option name="charting.chart.bubbleSizeBy">area</option>
-        <option name="charting.chart.showDataLabels">minmax</option>
-        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
-        <option name="wrap">true</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="charting.axisTitleX.text">Time</option>
-        <option name="charting.axisTitleY.text">Memory (GB)</option>
-        <option name="count">10</option>
-      </chart>
+        <option name="colorBy">value</option>
+        <option name="colorMode">none</option>
+        <option name="numberPrecision">0.000</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">0</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="drilldown">none</option>
+        <option name="afterLabel">GB</option>
+        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0xf58f39","0xf7bc38","0xd93f3c"]</option>
+        <option name="rangeValues">[0,30,70,100,200]</option>
+        <option name="trendInterval">auto</option>
+        <option name="linkView">search</option>
+      </single>
     </panel>
-  </row>
-  <row>
+  </row>  <row>
     <panel>
       <title>Missing LRPs</title>
       <single>
