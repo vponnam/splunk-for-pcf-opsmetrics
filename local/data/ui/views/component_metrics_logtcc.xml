@@ -65,7 +65,7 @@
     <chart>
       <title>GC Pause</title>
       <search base="global">
-        <query>timechart avg(opentsdb.nozzle.LoggregatorTrafficController.memoryStats.lastGCPauseTimeNS) as last_gc_pause_time by job_and_index</query>
+        <query>stats avg(opentsdb.nozzle.LoggregatorTrafficController.memoryStats.lastGCPauseTimeNS) as GCPause by _time job_and_index | eval lastGCPause = GCPause / 100000  | chart values(lastGCPause) as last_gc_pause_time_ns by _time job_and_index</query>
       </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
