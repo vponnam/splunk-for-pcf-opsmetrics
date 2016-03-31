@@ -22,7 +22,7 @@
     <view name="component_metrics_collector" />
     <view name="component_metrics_etcd" />
     <view name="component_metrics_logtcc" />
-    <view name="component_metrics_logsrv" />
+    <view name="component_metrics_doppler" />
   </collection>
 
   <collection label="Reports">
