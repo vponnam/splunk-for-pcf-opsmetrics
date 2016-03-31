@@ -1,0 +1,24 @@
+<dashboard>
+  <label>Avg Missing LRPs</label>
+  <row>
+    <panel>
+      <single>
+        <title>Missing LRPs</title>
+        <search>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.bbs.LRPsDesired opentsdb.nozzle.bbs.LRPsRunning opentsdb.nozzle.bbs.LRPsClaimed opentsdb.nozzle.bbs.CrashedActualLRPs | stats avg(opentsdb.nozzle.bbs.LRPsDesired) as avg_lrps_desired avg(opentsdb.nozzle.bbs.LRPsRunning) as avg_lrps_running avg(opentsdb.nozzle.bbs.LRPsClaimed) as avg_lrps_claimed avg(opentsdb.nozzle.bbs.CrashedActualLRPs) as avg_crashed_actual_lrps | eval avg_missing_lrps = avg_lrps_desired - avg_lrps_running - avg_lrps_claimed - avg_crashed_actual_lrps | fields avg_missing_lrps</query>
+          <earliest>rt-1h</earliest>
+          <latest>rt</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">0</option>
+        <option name="useThousandSeparators">1</option>
+      </single>
+    </panel>
+  </row>
+</dashboard>
