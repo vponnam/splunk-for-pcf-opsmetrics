@@ -18,7 +18,7 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="Router" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index router.total_requests router.total_routes router.bad_gateways router.bad_requests log_count_level_error log_count_level_warn log_count_level_fatal router.rejected_requests router.ms_since_last_registry_update router.routed_app_requests</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="Router" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index router.total_requests router.total_routes router.bad_gateways router.bad_requests "log_count[level=error]" "log_count[level=warn]" "log_count[level=fatal]" router.rejected_requests router.ms_since_last_registry_update router.routed_app_requests</searchTemplate>
   <row>
     <chart>
       <title>Total Requests</title>
@@ -105,8 +105,7 @@
   <row>
     <chart>
       <title>Logs</title>
-      <searchPostProcess>timechart avg(log_count_level_error) as "Error Log" avg(log_count_level_warn) as "Warn Log" avg(log_count_level_fatal) as "Fatal Log" by job_and_index useother=f
- limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg("log_count[level=error]") as "Error Log" avg("log_count[level=warn]") as "Warn Log" avg("log_count[level=fatal]") as "Fatal Log" by job_and_index useother=f  limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
@@ -201,5 +200,4 @@
       <option name="charting.axisTitleX.text">Time</option>
     </chart>
   </row>
-
 </form>
