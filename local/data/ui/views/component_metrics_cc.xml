@@ -8,8 +8,7 @@
       <choice value="*">All</choice>
       <default>*</default>
       <populatingSearch fieldForValue="jvmDescription" fieldForLabel="jvmDescription" earliest="-1d@d" latest="now">
-        <![CDATA[index=main sourcetype=
-jmx | dedup jvmDescription | table jvmDescription]]>
+        <![CDATA[index=main sourcetype=jmx | dedup jvmDescription | table jvmDescription]]>
       </populatingSearch>
     </input>
     <input type="time">
@@ -19,7 +18,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="CloudController" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index cc.http_status.1XX cc.http_status.2XX cc.http_status.3XX cc.http_status.4XX cc.http_status.5XX cc.requests.outstanding cc.requests.completed cc.job_queue_length.cc-generic total_users cpu_load_avg  log_count_level_warn log_count_level_error log_count_level_fatal cc.thread_info.thread_count cc.thread_info.event_machine.connection_count cc.thread_info.event_machine.resultqueue.size cc.thread_info.event_machine.resultqueue.num_waiting cc.thread_info.event_machine.threadqueue_waiting g cc.thread_info.event_machine.threadqueue.size</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="CloudController" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index cc.http_status.1XX cc.http_status.2XX cc.http_status.3XX cc.http_status.4XX cc.http_status.5XX cc.requests.outstanding cc.requests.completed cc.job_queue_length.cc-generic total_users cpu_load_avg  "log_count[level=warn]" "log_count[level=error]" "log_count[level=fatal]" cc.thread_info.thread_count cc.thread_info.event_machine.connection_count cc.thread_info.event_machine.resultqueue.size cc.thread_info.event_machine.resultqueue.num_waiting cc.thread_info.event_machine.threadqueue_waiting g cc.thread_info.event_machine.threadqueue.size</searchTemplate>
   <row>
     <chart>
       <title>HTTP Status Count</title>
@@ -236,7 +235,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
  <row>
     <chart>
       <title>Logs</title>
-     <searchPostProcess>timechart avg(log_count_level_warn) as "Warning" avg(log_count_level_error) as "Error" avg(log_count_level_fatal) as "Fatal" by job_and_index useother=f limit=200</searchPostProcess>
+     <searchPostProcess>timechart avg("log_count[level=warn]") as "Warning" avg("log_count[level=error]") as "Error" avg("log_count[level=fatal]") as "Fatal" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
