@@ -259,7 +259,9 @@
       <single>
         <title>Router_request_per_sec</title>
         <search>
-          <query>index = main mbean_property_job=Router earliest=-1m latest=now() | rename "router.requests[component=CloudController]" as router_requests | stats avg(router_requests) as requests_sent | eval requests_per_second=requests_sent/60 | table requests_per_second</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev"  mbean_property_job=Router earliest=-1m latest=now() | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | rename "router.requests_component_CloudController]" as router_requests | stats avg(router_requests) as avg_router_requests by _time job_and_index | eval requests_per_second=avg_router_requests * 0.001 | table requests_per_second</query>
+          <earliest>0</earliest>
+          <latest></latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
