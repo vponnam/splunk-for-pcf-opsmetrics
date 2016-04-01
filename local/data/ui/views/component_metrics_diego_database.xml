@@ -20,6 +20,53 @@
   </fieldset>
   <row>
     <panel>
+      <title>Total Available Memory</title>
+      <single>
+        <title>Total memory available for all apps for the PCF installation</title>
+        <search>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | timechart sum(opentsdb.nozzle.rep.CapacityRemainingMemory) as totalAvailableMemory by job_and_index | stats avg | addtotals fieldname=sum | eval total_capacity_remaining_in_gb = sum / 1024 | table total_capacity_remaining_in_gb</query>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">none</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">0</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="afterLabel">GB</option>
+        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0xf58f39","0xf7bc38","0xd93f3c"]</option>
+        <option name="rangeValues">[0,30,70,100,200]</option>
+        <option name="trendInterval">auto</option>
+        <option name="linkView">search</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
       <title>Minimum Available Memory by Cell</title>
       <single>
         <title>Lowest available memory on a cell among all cells</title>
@@ -79,57 +126,6 @@
         <option name="afterLabel">GB</option>
       </single>
     </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Total Available Memory</title>
-      <single>
-        <title>Total memory available for all apps for the PCF installation</title>
-        <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | timechart sum(opentsdb.nozzle.rep.CapacityRemainingMemory) as totalAvailableMemory by job_and_index | stats avg | addtotals fieldname=sum | eval total_capacity_remaining_in_gb = sum / 1024 | table total_capacity_remaining_in_gb</query>
-        </search>
-        <option name="colorBy">value</option>
-        <option name="colorMode">none</option>
-        <option name="numberPrecision">0.00</option>
-        <option name="showSparkline">1</option>
-        <option name="showTrendIndicator">1</option>
-        <option name="trendColorInterpretation">standard</option>
-        <option name="trendDisplayMode">absolute</option>
-        <option name="useColors">0</option>
-        <option name="useThousandSeparators">1</option>
-        <option name="afterLabel">GB</option>
-        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0xf58f39","0xf7bc38","0xd93f3c"]</option>
-        <option name="rangeValues">[0,30,70,100,200]</option>
-        <option name="trendInterval">auto</option>
-        <option name="linkView">search</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.visibility">visible</option>
-        <option name="charting.axisTitleY2.visibility">visible</option>
-        <option name="charting.axisX.scale">linear</option>
-        <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">0</option>
-        <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">area</option>
-        <option name="charting.chart.bubbleMaximumSize">50</option>
-        <option name="charting.chart.bubbleMinimumSize">10</option>
-        <option name="charting.chart.bubbleSizeBy">area</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.showDataLabels">none</option>
-        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
-        <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
-        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
-        <option name="drilldown">none</option>
-      </single>
-    </panel>
-  </row>
-  <row>
     <panel>
       <title>Missing LRPs</title>
       <single>
