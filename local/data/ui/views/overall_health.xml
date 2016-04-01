@@ -257,11 +257,11 @@
   <row>
     <panel>
       <single>
-        <title>Router_request_per_sec</title>
+        <title>Router Req/s (5m)</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev"  mbean_property_job=Router earliest=-1m latest=now() | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | rename "router.requests_component_CloudController]" as router_requests | stats avg(router_requests) as avg_router_requests by _time job_and_index | eval requests_per_second=avg_router_requests * 0.001 | table requests_per_second</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf"  mbean_property_job="router-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | rename "opentsdb.nozzle.router__0.total_requests" as total_requests | stats sum(total_requests) as sum_total_requests by _time job_and_index | eval requests_per_second =  sum_total_requests * 0.001 | table requests_per_second</query>
+          <earliest>rt-5m</earliest>
+          <latest>rtnow</latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -276,6 +276,33 @@
         <option name="rangeValues">[0,30,70,100]</option>
         <option name="trendInterval">auto</option>
         <option name="underLabel">per second</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>API Req/s (5m)</title>
+        <search>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf"  mbean_property_job="router-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | rename "opentsdb.nozzle.router__0.requests.CloudController" as cc_requests | stats sum(cc_requests) as sum_capi_requests by _time job_and_index | eval requests_per_second=  sum_capi_requests * 0.001 | table requests_per_second</query>
+          <earliest>rt-5m</earliest>
+          <latest>rtnow</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0x65a637","0x65a637"]</option>
+        <option name="rangeValues">[0,30,70,100]</option>
+        <option name="showSparkline">true</option>
+        <option name="showTrendIndicator">true</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">per second</option>
+        <option name="useColors">true</option>
+        <option name="useThousandSeparators">true</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
       </single>
