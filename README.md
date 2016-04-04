@@ -12,6 +12,8 @@ For installation and set-up instructions, refer to the Installation and Configur
 
 For release notes, refer to the Release notes [section](http://docs.splunk.com/Documentation/AddOns/latest/JMX/Releasenotes).
 
+For PCF platform logging, visit [splunk-for-pcf-logging](https://github.com/pivotalservices/splunk-for-pcf-logging).
+
 ### Work in Progress
 - [ ] Add Diego Metrics
 
