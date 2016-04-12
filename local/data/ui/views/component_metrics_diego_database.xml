@@ -24,7 +24,7 @@
       <single>
         <title>Total memory available for all apps for the PCF installation</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | timechart sum(opentsdb.nozzle.rep.CapacityRemainingMemory) as totalAvailableMemory by job_and_index | stats avg | addtotals fieldname=sum | eval total_capacity_remaining_in_gb = sum / 1024 | table total_capacity_remaining_in_gb</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | timechart sum(opentsdb.nozzle.rep.CapacityRemainingMemory) as totalAvailableMemory by job_and_index | stats last | addtotals fieldname=sum | eval total_capacity_remaining_in_gb = sum / 1024 | table total_capacity_remaining_in_gb</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">none</option>
@@ -63,6 +63,7 @@
         <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
         <option name="charting.legend.placement">right</option>
+        <option name="unitPosition">after</option>
         <option name="drilldown">none</option>
       </single>
     </panel>
