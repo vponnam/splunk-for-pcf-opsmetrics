@@ -24,7 +24,7 @@
       <single>
         <title>Total memory available for all apps for the PCF installation</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | timechart sum(opentsdb.nozzle.rep.CapacityRemainingMemory) as totalAvailableMemory by job_and_index | stats last | addtotals fieldname=sum | eval total_capacity_remaining_in_gb = sum / 1024 | table total_capacity_remaining_in_gb</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | timechart sum(opentsdb.nozzle.rep.CapacityRemainingMemory) as totalAvailableMemory by job_and_index | stats last | addtotals fieldname=sum | eval total_capacity_remaining_in_gb = sum / 1024 | table total_capacity_remaining_in_gb</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">none</option>
@@ -72,7 +72,7 @@
       <single>
         <title>Lowest available memory on a cell among all cells</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | stats min(opentsdb.nozzle.rep.CapacityRemainingMemory) as min_remaining_memory by _time job_and_index | stats min | addtotals fieldname=min | eval min_remaining_memory_in_gb = min / 1024 | fields min_remaining_memory_in_gb</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.rep.CapacityRemainingMemory | stats min(opentsdb.nozzle.rep.CapacityRemainingMemory) as min_remaining_memory by _time job_and_index | stats min | addtotals fieldname=min | eval min_remaining_memory_in_gb = min / 1024 | fields min_remaining_memory_in_gb</query>
         </search>
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.axisTitleY.visibility">visible</option>
@@ -132,7 +132,7 @@
       <single>
         <title>How many long running processes (ie. App instances) are missing</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.bbs.LRPsDesired opentsdb.nozzle.bbs.LRPsRunning opentsdb.nozzle.bbs.LRPsClaimed opentsdb.nozzle.bbs.CrashedActualLRPs | stats avg(opentsdb.nozzle.bbs.LRPsDesired) as avg_lrps_desired avg(opentsdb.nozzle.bbs.LRPsRunning) as avg_lrps_running avg(opentsdb.nozzle.bbs.LRPsClaimed) as avg_lrps_claimed avg(opentsdb.nozzle.bbs.CrashedActualLRPs) as avg_crashed_actual_lrps | eval avg_missing_lrps = avg_lrps_desired - avg_lrps_running - avg_lrps_claimed - avg_crashed_actual_lrps | fields avg_missing_lrps</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.bbs.LRPsDesired opentsdb.nozzle.bbs.LRPsRunning opentsdb.nozzle.bbs.LRPsClaimed opentsdb.nozzle.bbs.CrashedActualLRPs | stats avg(opentsdb.nozzle.bbs.LRPsDesired) as avg_lrps_desired avg(opentsdb.nozzle.bbs.LRPsRunning) as avg_lrps_running avg(opentsdb.nozzle.bbs.LRPsClaimed) as avg_lrps_claimed avg(opentsdb.nozzle.bbs.CrashedActualLRPs) as avg_crashed_actual_lrps | eval avg_missing_lrps = avg_lrps_desired - avg_lrps_running - avg_lrps_claimed - avg_crashed_actual_lrps | fields avg_missing_lrps</query>
         </search>
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.axisTitleY.visibility">visible</option>
@@ -193,7 +193,7 @@
       <chart>
         <title>Measures whether a particular component on the CC-Bridge has recently been able to synchronize the CF apps that CC thinks are supposed to run on the Diego backend with the DesiredLRPs that Diego has actually been told to run.</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.bbs.Domain.cf-apps | timechart avg(opentsdb.nozzle.bbs.Domain.cf-apps) as avg_domains_desired by job_and_index</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "untitled_dev" OR "cf-*" mbean_property_job="diego_cell-*" OR "diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.bbs.Domain.cf-apps | timechart avg(opentsdb.nozzle.bbs.Domain.cf-apps) as avg_domains_desired by job_and_index</query>
           <earliest>rt-1h</earliest>
           <latest>rt</latest>
         </search>

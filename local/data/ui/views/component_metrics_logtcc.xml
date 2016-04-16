@@ -18,7 +18,7 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "cf-*" mbean_property_job="loggregator_trafficcontroller-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.LoggregatorTrafficController.numGoRoutines opentsdb.nozzle.MetronAgent.dropsondeAgentListener.currentBufferCount  opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedByteCount  opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedMessageCount  opentsdb.nozzle.MetronAgent.udp.sentByteCount opentsdb.nozzle.MetronAgent.udp.sentMessageCount opentsdb.nozzle.LoggregatorTrafficController.memoryStats.lastGCPauseTimeNS</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" OR "cf-*" mbean_property_job="loggregator_trafficcontroller-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.LoggregatorTrafficController.numGoRoutines opentsdb.nozzle.MetronAgent.dropsondeAgentListener.currentBufferCount  opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedByteCount  opentsdb.nozzle.MetronAgent.dropsondeAgentListener.receivedMessageCount  opentsdb.nozzle.MetronAgent.udp.sentByteCount opentsdb.nozzle.MetronAgent.udp.sentMessageCount opentsdb.nozzle.LoggregatorTrafficController.memoryStats.lastGCPauseTimeNS</searchTemplate>
   <row>
     <chart>
       <title>Listener Stats</title>

@@ -7,7 +7,7 @@
       <chart>
         <title>Number of app instances running across all cells</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.bbs.LRPsRunning | timechart avg(opentsdb.nozzle.bbs.LRPsRunning) by job_and_index</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.bbs.LRPsRunning | timechart avg(opentsdb.nozzle.bbs.LRPsRunning) by job_and_index</query>
           <earliest>rt-1h</earliest>
           <latest>rt</latest>
         </search>

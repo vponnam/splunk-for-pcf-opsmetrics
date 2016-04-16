@@ -19,13 +19,13 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="etcd" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index etcd.leader.Followers etcd.server.IsLeader etcd.server.ReceivedAppendRequests etcd.server.ReceivingBandwidthRate etcd.server.ReceivingRequestRate etcd.server.SendingBandwidthRate etcd.server.SendingRequestRate etcd.server.SentAppendRequests</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="etcd" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index etcd.leader.Followers etcd.server.IsLeader etcd.server.ReceivedAppendRequests etcd.server.ReceivingBandwidthRate etcd.server.ReceivingRequestRate etcd.server.SendingBandwidthRate etcd.server.SendingRequestRate etcd.server.SentAppendRequests</searchTemplate>
   <row>
     <panel>
       <chart>
         <title>etcd Raft Term</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="etcd_server-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.etcd.RaftTerm | timechart avg(opentsdb.nozzle.etcd.RaftTerm) as "ETCD Raft Term" by job_and_index useother=f limit=200</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="etcd_server-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.etcd.RaftTerm | timechart avg(opentsdb.nozzle.etcd.RaftTerm) as "ETCD Raft Term" by job_and_index useother=f limit=200</query>
           <earliest>1459447025.000</earliest>
           <latest>1459450625.000</latest>
         </search>

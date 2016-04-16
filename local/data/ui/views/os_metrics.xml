@@ -18,7 +18,7 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index system.disk.system.percent system.disk.ephemeral.percent system.disk.persistent.percent system.cpu.sys system.cpu.user system.swap.percent system.mem.percent</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index system.disk.system.percent system.disk.ephemeral.percent system.disk.persistent.percent system.cpu.sys system.cpu.user system.swap.percent system.mem.percent</searchTemplate>
   <row>
     <chart>
       <title>System Disk Percentage Used</title>

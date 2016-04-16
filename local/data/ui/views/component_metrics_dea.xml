@@ -18,7 +18,7 @@
       </default>
     </input>
   </fieldset>
-<searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="DEA" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index dea_registry_resuming dea_registry_crashed dea_registry_starting dea_registry_born dea_registry_deleted dea_registry_stopped dea_registry_running dea_registry_stopping available_memory_ratio available_disk_ratio log_count_level_error log_count_level_warn log_count_level_fatal reservable_stagers can_stage cpu_load_avg warden_request_count total_warden_response_time_in_ms</searchTemplate>
+<searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="DEA" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index dea_registry_resuming dea_registry_crashed dea_registry_starting dea_registry_born dea_registry_deleted dea_registry_stopped dea_registry_running dea_registry_stopping available_memory_ratio available_disk_ratio log_count_level_error log_count_level_warn log_count_level_fatal reservable_stagers can_stage cpu_load_avg warden_request_count total_warden_response_time_in_ms</searchTemplate>
   <row>
     <chart>
       <title>CPU Load</title>

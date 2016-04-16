@@ -7,7 +7,7 @@
       <chart>
         <title>Normally the sync time should be very low. If the time is high, it means there is something wrong between Cloud Controller and Diego components.</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="diego_brain-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index opentsdb.nozzle.nsync_bulker.DesiredLRPSyncDuration | stats values(opentsdb.nozzle.nsync_bulker.DesiredLRPSyncDuration) as desired_sync_duration by _time job_and_index | eval duration = desired_sync_duration / 1000000000 | appendcols [search duration | timechart max(duration) as duration by job_and_index]</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="diego_brain-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.nsync_bulker.DesiredLRPSyncDuration | stats values(opentsdb.nozzle.nsync_bulker.DesiredLRPSyncDuration) as desired_sync_duration by _time job_and_index | eval duration = desired_sync_duration / 1000000000 | appendcols [search duration | timechart max(duration) as duration by job_and_index]</query>
           <earliest>rt-1h</earliest>
           <latest>rt</latest>
         </search>

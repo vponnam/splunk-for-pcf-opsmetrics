@@ -18,7 +18,7 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="Router" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index router.total_requests router.total_routes router.bad_gateways router.bad_requests "log_count[level=error]" "log_count[level=warn]" "log_count[level=fatal]" router.rejected_requests router.ms_since_last_registry_update router.routed_app_requests</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="Router" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index router.total_requests router.total_routes router.bad_gateways router.bad_requests "log_count[level=error]" "log_count[level=warn]" "log_count[level=fatal]" router.rejected_requests router.ms_since_last_registry_update router.routed_app_requests</searchTemplate>
   <row>
     <chart>
       <title>Total Requests</title>
