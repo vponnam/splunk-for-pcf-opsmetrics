@@ -22,7 +22,9 @@
   <row>
     <chart>
       <title>HTTP Status Count</title>
-      <searchPostProcess>timechart avg(cc.http_status.1XX) as "HTTP 1XX  Count" avg(cc.http_status.2XX) as "HTTP 2XX Count" avg(cc.http_status.3XX) as "HTTP 3XX Count" avg(cc.http_status.4XX) as "HTTP 4XX Count" avg(cc.http_status.5XX) as "HTTP 5XX Count" by job_and_index useother=f limit=200</searchPostProcess>
+      <search base="global">
+        <query>timechart avg(cc.http_status.1XX) as "HTTP 1XX  Count" avg(cc.http_status.2XX) as "HTTP 2XX Count" avg(cc.http_status.3XX) as "HTTP 3XX Count" avg(cc.http_status.4XX) as "HTTP 4XX Count" avg(cc.http_status.5XX) as "HTTP 5XX Count" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.chart">line</option>
       <option name="charting.chart.nullValueMode">connect</option>
       <option name="charting.axisTitleX.text">Time</option>
@@ -36,16 +38,26 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
   <row>
     <chart>
       <title>Requests</title>
-     <searchPostProcess>timechart avg(cc.requests.outstanding) as "Outstanding Requests" avg(cc.requests.completed) as "Completed Requests" by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg(cc.requests.outstanding) as "Outstanding Requests" avg(cc.requests.completed) as "Completed Requests" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -57,7 +69,7 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <option name="count">10</option>
       <option name="list.drilldown">full</option>
@@ -70,14 +82,24 @@
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Requests</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
   <row>
     <chart>
       <title>Job Queue Length</title>
-     <searchPostProcess>timechart avg(cc.job_queue_length.cc-generic) as "Job Queue Length" by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg(cc.job_queue_length.cc-generic) as "Job Queue Length" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -89,7 +111,7 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <option name="count">10</option>
       <option name="list.drilldown">full</option>
@@ -102,14 +124,24 @@
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Count</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
   <row>
     <chart>
       <title>Total Users</title>
-     <searchPostProcess>timechart avg(total_users) as "Users" by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg(total_users) as "Users" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -121,7 +153,7 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <option name="count">10</option>
       <option name="list.drilldown">full</option>
@@ -134,14 +166,24 @@
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Users</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
- <row>
+  <row>
     <chart>
       <title>Event Machine Thread Queue</title>
-     <searchPostProcess>timechart avg(cc.thread_info.event_machine.threadqueue_waiting) as "Threads waiting" avg(cc.thread_info.event_machine.threadqueue.size) as "Queue Size" by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg(cc.thread_info.event_machine.threadqueue_waiting) as "Threads waiting" avg(cc.thread_info.event_machine.threadqueue.size) as "Queue Size" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -153,7 +195,7 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <option name="count">10</option>
       <option name="list.drilldown">full</option>
@@ -166,14 +208,24 @@
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Queue Size</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
- <row>
+  <row>
     <chart>
       <title>Event Machine Result Queue</title>
-     <searchPostProcess>timechart avg(cc.thread_info.event_machine.resultqueue.size) as "Queue Size" avg(cc.thread_info.event_machine.resultqueue.num_waiting) as "Results Waiting" by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg(cc.thread_info.event_machine.resultqueue.size) as "Queue Size" avg(cc.thread_info.event_machine.resultqueue.num_waiting) as "Results Waiting" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -185,7 +237,7 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <option name="count">10</option>
       <option name="list.drilldown">full</option>
@@ -198,14 +250,24 @@
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Queue size</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
-<row>
+  <row>
     <chart>
       <title>Thread Info</title>
-     <searchPostProcess>timechart avg(cc.thread_info.thread_count) as "Threads" avg(cc.thread_info.event_machine.connection_count) as "Connections" by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg(cc.thread_info.thread_count) as "Threads" avg(cc.thread_info.event_machine.connection_count) as "Connections" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -217,7 +279,7 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <option name="count">10</option>
       <option name="list.drilldown">full</option>
@@ -230,14 +292,24 @@
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Count</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
- <row>
+  <row>
     <chart>
       <title>Logs</title>
-     <searchPostProcess>timechart avg("log_count[level=warn]") as "Warning" avg("log_count[level=error]") as "Error" avg("log_count[level=fatal]") as "Fatal" by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg("log_count[level=warn]") as "Warning" avg("log_count[level=error]") as "Error" avg("log_count[level=fatal]") as "Fatal" by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -249,7 +321,7 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <option name="count">10</option>
       <option name="list.drilldown">full</option>
@@ -262,14 +334,24 @@
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Count</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
- <row>
+  <row>
     <chart>
       <title>CPU Load</title>
-     <searchPostProcess>timechart avg(cpu_load_avg) as "CPU Load " by job_and_index useother=f limit=200</searchPostProcess>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
+      <search base="global">
+        <query>timechart avg(cpu_load_avg) as "CPU Load " by job_and_index useother=f limit=200</query>
+      </search>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -281,7 +363,7 @@
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <option name="count">10</option>
       <option name="list.drilldown">full</option>
@@ -294,6 +376,16 @@
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Load Avg</option>
       <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
 </form>
