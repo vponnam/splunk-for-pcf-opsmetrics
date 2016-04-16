@@ -6,7 +6,7 @@
       <single>
         <title>Router_Partition_24h</title>
         <search>
-          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*" earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>
@@ -49,6 +49,7 @@
         <option name="rangeValues">[0,50,80,90]</option>
         <option name="trendInterval">-24h</option>
         <option name="underLabel">for past 24hrs</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
     <panel>
@@ -56,9 +57,7 @@
       <single>
         <title>Router_Partition_5m</title>
         <search>
-          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*" earliest=-5m latest=now() | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -99,6 +98,7 @@
         <option name="trendInterval">-1m</option>
         <option name="underLabel">for past 5mins</option>
         <option name="linkView">search</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
     <panel>
@@ -106,7 +106,7 @@
       <single>
         <title>NATS_Partition_24hrs</title>
         <search>
-          <query>index = main NATS mbean_property_job="nats-partition-*" earliest=-1d latest=now() |bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="nats-partition-*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -124,6 +124,7 @@
         <option name="underLabel">past 24hrs</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
     <panel>
@@ -131,7 +132,7 @@
       <single>
         <title>NATS_Partition</title>
         <search>
-          <query>index=main NATS mbean_property_job="nats-partition-*" earliest=-5m latest=now() | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="nats-partition-*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -149,6 +150,7 @@
         <option name="underLabel">past 5mins</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
   </row>
@@ -183,7 +185,7 @@
       <single>
         <title>Diego_cell_partition_5m</title>
         <search>
-          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="diego_cell-partition-*" earliest=-5m latest=now() | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="diego_cell-partition-*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -201,6 +203,7 @@
         <option name="underLabel">for past 5mins</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
     <panel>
@@ -208,7 +211,7 @@
       <single>
         <title>Doppler_Partition_24hrs</title>
         <search>
-          <query>index = main doppler mbean_property_job="doppler-partition-*" earliest=-1d latest=now() | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="doppler-partition-*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -226,6 +229,7 @@
         <option name="underLabel">past 24hrs</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
     <panel>
@@ -233,7 +237,7 @@
       <single>
         <title>Doppler_Partition</title>
         <search>
-          <query>index=main doppler mbean_property_job="doppler-partition-*" earliest=-5m latest=now() | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="doppler-partition-*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -251,6 +255,7 @@
         <option name="underLabel">past 5mins</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
   </row>
@@ -259,7 +264,7 @@
       <single>
         <title>Router Req/s (5m)</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf"  mbean_property_job="router-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "opentsdb.nozzle.router__0.total_requests" as total_requests | stats sum(total_requests) as sum_total_requests by _time job_and_index | eval requests_per_second =  sum_total_requests * 0.001 | table requests_per_second</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="router-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "opentsdb.nozzle.router__0.total_requests" as total_requests | stats sum(total_requests) as sum_total_requests by _time job_and_index | eval requests_per_second =  sum_total_requests * 0.001 | table requests_per_second</query>
           <earliest>rt-5m</earliest>
           <latest>rtnow</latest>
         </search>
@@ -278,6 +283,7 @@
         <option name="underLabel">per second</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
   </row>
@@ -286,7 +292,7 @@
       <single>
         <title>API Req/s (5m)</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf"  mbean_property_job="router-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "opentsdb.nozzle.router__0.requests.CloudController" as cc_requests | stats sum(cc_requests) as sum_capi_requests by _time job_and_index | eval requests_per_second=  sum_capi_requests * 0.001 | table requests_per_second</query>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf"  mbean_property_job="router-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "opentsdb.nozzle.router__0.requests.CloudController" as cc_requests | stats sum(cc_requests) as sum_capi_requests by _time job_and_index | eval requests_per_second = sum_capi_requests * 0.001 | table requests_per_second</query>
           <earliest>rt-5m</earliest>
           <latest>rtnow</latest>
         </search>
@@ -305,6 +311,7 @@
         <option name="useThousandSeparators">true</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
+        <option name="unitPosition">after</option>
       </single>
     </panel>
   </row>

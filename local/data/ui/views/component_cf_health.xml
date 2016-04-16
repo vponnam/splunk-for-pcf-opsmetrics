@@ -22,8 +22,6 @@
   <row>
     <chart>
       <title>CF Health</title>
-      <earliestTime>$earliest$</earliestTime>
-      <latestTime>$latest$</latestTime>
       <search base="global">
         <query>timechart avg(system.healthy) as "CF Health" by job_and_index useother=f limit=200</query>
       </search>
@@ -36,14 +34,14 @@
       <option name="charting.axisX.scale">linear</option>
       <option name="charting.axisY.scale">linear</option>
       <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.stackMode">stacked100</option>
       <option name="charting.chart.style">shiny</option>
       <option name="charting.drilldown">all</option>
       <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
       <option name="charting.legend.placement">right</option>
       <fields>["jvmDescription","source","sourcetype"]</fields>
-      <option name="charting.axisTitleY.text">Healthy</option>
+      <option name="charting.axisTitleY.text">Health</option>
       <option name="charting.axisTitleX.text">Time</option>
       <option name="height">600</option>
       <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
