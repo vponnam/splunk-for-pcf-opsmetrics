@@ -23,7 +23,7 @@
     <chart>
       <title>Total Requests</title>
       <search base="global">
-        <query>timechart avg(router.total_requests) as "Total Requests" by job_and_index useother=f limit=200</query>
+        <query>timechart avg(router.total_requests) as "Total Requests" by job_and_index useother=f limit=200 | addtotals | fields _time Total</query>
       </search>
       <option name="charting.chart">line</option>
       <option name="charting.chart.nullValueMode">connect</option>
@@ -55,7 +55,7 @@
   <row>
     <chart>
       <title>Total Routes</title>
-      <searchPostProcess>timechart avg(router.total_routes) as "Total Routes" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(router.total_routes) as "Total Routes" by job_and_index useother=f limit=200 | addtotals</searchPostProcess>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -85,7 +85,7 @@
   <row>
     <chart>
       <title>Bad Gateways and Requests</title>
-      <searchPostProcess>timechart avg(router.bad_gateways) as "Bad Gateways" avg(router.rejected_requests) as "Rejected Requests" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(router.bad_gateways) as "Bad Gateways" avg(router.rejected_requests) as "Rejected Requests" by job_and_index useother=f limit=200 | addtotals</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
@@ -117,7 +117,7 @@
   <row>
     <chart>
       <title>Logs</title>
-      <searchPostProcess>timechart avg("log_count[level=error]") as "Error Log" avg("log_count[level=warn]") as "Warn Log" avg("log_count[level=fatal]") as "Fatal Log" by job_and_index useother=f  limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg("log_count[level=error]") as "Error Log" avg("log_count[level=warn]") as "Warn Log" avg("log_count[level=fatal]") as "Fatal Log" by job_and_index useother=f  limit=200 | addtotals</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
@@ -149,8 +149,7 @@
   <row>
     <chart>
       <title>Ms Since Last Registry Update</title>
-      <searchPostProcess>timechart avg(router.ms_since_last_registry_update) as "MS Since Update" by job_and_index useother=f
- limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(router.ms_since_last_registry_update) as "MS Since Update" by job_and_index useother=f limit=200 | addtotals</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
@@ -182,8 +181,7 @@
   <row>
     <chart>
       <title>Routed App Requests</title>
-      <searchPostProcess>timechart avg(router.routed_app_requests) as "App Requests" by job_and_index useother=f
- limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(router.routed_app_requests) as "App Requests" by job_and_index useother=f limit=200 | addtotals</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
