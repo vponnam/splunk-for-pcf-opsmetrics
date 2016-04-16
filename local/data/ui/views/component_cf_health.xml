@@ -18,14 +18,16 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" OR "cf" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index healthy system.healthy</searchTemplate>
+  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index system.healthy</searchTemplate>
   <row>
     <chart>
       <title>CF Health</title>
-      <searchPostProcess>timechart avg(healthy) as "CF Health" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
-      <option name="charting.chart">line</option>
+      <search base="global">
+        <query>timechart avg(system.healthy) as "CF Health" by job_and_index useother=f limit=200</query>
+      </search>
+      <option name="charting.chart">column</option>
       <option name="charting.chart.nullValueMode">connect</option>
       <option name="charting.axisTitleX.text">Time</option>
       <option name="charting.axisTitleY.text">Health</option>
@@ -44,6 +46,16 @@
       <option name="charting.axisTitleY.text">Healthy</option>
       <option name="charting.axisTitleX.text">Time</option>
       <option name="height">600</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
     </chart>
   </row>
 </form>
