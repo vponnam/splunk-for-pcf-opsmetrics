@@ -277,8 +277,8 @@
         <option name="trendDisplayMode">absolute</option>
         <option name="useColors">1</option>
         <option name="useThousandSeparators">1</option>
-        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0x65a637","0x65a637"]</option>
-        <option name="rangeValues">[0,30,70,100]</option>
+        <option name="rangeColors">["0xd93f3c","0xf7bc38","0x65a637"]</option>
+        <option name="rangeValues">[5,20]</option>
         <option name="trendInterval">auto</option>
         <option name="underLabel">per second</option>
         <option name="linkView">search</option>
@@ -292,15 +292,15 @@
       <single>
         <title>API Req/s (5m)</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" opentsdb.nozzle.router__0.requests.CloudController=* jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf"  mbean_property_job="router-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "opentsdb.nozzle.router__0.requests.CloudController" as cc_requests | stats sum(cc_requests) as sum_capi_requests by _time job_and_index | eval requests_per_second = sum_capi_requests * 0.001 | table requests_per_second | tail</query>
+          <query>index=main sourcetype=jmx host="*" opentsdb.nozzle.router__0.requests.CloudController=* jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf"  mbean_property_job="router-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "opentsdb.nozzle.router__0.requests.CloudController" as cc_requests | stats sum(cc_requests) as sum_capi_requests by _time job_and_index | eval requests_per_second = sum_capi_requests * 0.001 | table requests_per_second</query>
           <earliest>rt-5m</earliest>
           <latest>rtnow</latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
         <option name="numberPrecision">0</option>
-        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0x65a637","0x65a637"]</option>
-        <option name="rangeValues">[0,30,70,100]</option>
+        <option name="rangeColors">["0xd93f3c","0xf7bc38","0x65a637"]</option>
+        <option name="rangeValues">[5,20]</option>
         <option name="showSparkline">true</option>
         <option name="showTrendIndicator">true</option>
         <option name="trendColorInterpretation">standard</option>
