@@ -1,21 +1,30 @@
 <dashboard>
-  <label>NSYNC Bulker Time</label>
-  <description>The time taken by NSYNC to get all its values synced</description>
+  <label>Diego LRPs &amp; Tasks</label>
+  <description>Diego LRPs &amp; Tasks</description>
   <row>
     <panel>
-      <title>Desired LRP Sync Duration</title>
-      <chart>
-        <title>Normally the sync time should be very low. If the time is high, it means there is something wrong between Cloud Controller and Diego components.</title>
+      <table>
+        <title>Diego Tasks</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" opentsdb.nozzle.nsync_bulker.DesiredLRPSyncDuration=* jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="diego_brain-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | timechart span=1m max(opentsdb.nozzle.nsync_bulker.DesiredLRPSyncDuration) as desired_sync_duration by job_and_index | foreach * [eval &lt;&lt;FIELD&gt;&gt; = '&lt;&lt;FIELD&gt;&gt;' / 1000000]</query>
-          <earliest>rt-1h</earliest>
-          <latest>rt</latest>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="diego_database-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index opentsdb.nozzle.bbs.TasksPending opentsdb.nozzle.bbs.TasksClaimed opentsdb.nozzle.bbs.TasksCompleted opentsdb.nozzle.bbs.TasksResolving | stats avg(*) by job_and_index</query>
+          <earliest></earliest>
+          <latest></latest>
+        </search>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Running Tasks and LRPs</title>
+        <search>
+          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job=* | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | timechart sum(opentsdb.nozzle.rep.ContainersExpected) as containers_expected  sum(opentsdb.nozzle.rep.ContainersActual) as containers_actual avg(opentsdb.nozzle.bbs.LRPsDesired) as avg_lrps_desired</query>
+          <earliest></earliest>
+          <latest></latest>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.text">Duration (ms)</option>
         <option name="charting.axisTitleY.visibility">visible</option>
         <option name="charting.axisTitleY2.visibility">visible</option>
         <option name="charting.axisX.scale">linear</option>
@@ -27,7 +36,7 @@
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
         <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.showDataLabels">minmax</option>
+        <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
         <option name="charting.chart.style">shiny</option>
@@ -35,7 +44,7 @@
         <option name="charting.layout.splitSeries">0</option>
         <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">right</option>
       </chart>
     </panel>
   </row>
