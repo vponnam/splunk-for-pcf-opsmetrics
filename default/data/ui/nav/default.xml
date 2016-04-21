@@ -16,6 +16,7 @@
     <view name="component_metrics_cc" />
     <view name="component_metrics_diego_database" />
     <view name="component_metrics_diego_cell" />
+    <view name="component_metrics_diego_lrps_tasks" />
     <view name="component_metrics_diego_brain" />
     <view name="component_metrics_etcd" />
     <view name="component_metrics_dea" />
