@@ -15,6 +15,6 @@ For release notes, refer to the Release notes [section](http://docs.splunk.com/D
 For PCF platform logging, visit [splunk-for-pcf-logging](https://github.com/pivotalservices/splunk-for-pcf-logging).
 
 ### Work in Progress
-- [ ] Add Diego Metrics
+- [x] Add Diego Metrics
 
 
