@@ -14,6 +14,29 @@ For release notes, refer to the Release notes [section](http://docs.splunk.com/D
 
 For PCF platform logging, visit [splunk-for-pcf-logging](https://github.com/pivotalservices/splunk-for-pcf-logging).
 
+## Install
+After you have installed and configured the Splunk JMX Add-On
+
+1. Login to your Splunk instance, for example:
+```
+    ssh -i "splunk.pem" ec2-user@ec2-53-44-87-326.compute-1.amazonaws.com
+```
+2. Add new dashboards to the Add-On
+```
+    $ cd /opt/splunk/etc/apps
+    $ mkdir opsmetrics
+    $ wget -qO- "https://github.com/pivotalservices/splunk-for-pcf-opsmetrics/archive/1.0.0.tar.gz" \
+      | tar -xzC opsmetrics --strip-components 1
+    $ cd /opt/splunk/etc/apps/Splunk_TA_jmx
+    $ cp /opt/splunk/etc/apps/opsmetrics/default/data/ui/nav/default.xml default/data/ui/nav/default.xml
+    $ cd /opt/splunk/etc/apps/Splunk_TA_jmx/local
+    $ cp -R /opt/splunk/etc/apps/opsmetrics/local/data/ data/
+```
+3. Restart Splunk
+```
+    $ /opt/splunk/bin/splunk restart
+```
+
 ### Work in Progress
 - [x] Add Diego Metrics
 
