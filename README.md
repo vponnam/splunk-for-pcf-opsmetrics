@@ -15,13 +15,14 @@ For release notes, refer to the Release notes [section](http://docs.splunk.com/D
 For PCF platform logging, visit [splunk-for-pcf-logging](https://github.com/pivotalservices/splunk-for-pcf-logging).
 
 ## Install
-After you have installed and configured the Splunk JMX Add-On
+After you have installed and configured the Splunk JMX Add-On (see above) you can follow these instructions to install the custom dashboards into the Add-On
 
-1. Login to your Splunk instance, for example:
+* Login to your Splunk instance, for example:
 ```
     ssh -i "splunk.pem" ec2-user@ec2-53-44-87-326.compute-1.amazonaws.com
 ```
-2. Add new dashboards to the Add-On
+
+* Add new dashboards to the Add-On
 ```
     $ cd /opt/splunk/etc/apps
     $ mkdir opsmetrics
@@ -32,7 +33,8 @@ After you have installed and configured the Splunk JMX Add-On
     $ cd /opt/splunk/etc/apps/Splunk_TA_jmx/local
     $ cp -R /opt/splunk/etc/apps/opsmetrics/local/data/ data/
 ```
-3. Restart Splunk
+
+* Restart Splunk
 ```
     $ /opt/splunk/bin/splunk restart
 ```
