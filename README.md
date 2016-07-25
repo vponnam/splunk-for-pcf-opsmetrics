@@ -38,8 +38,3 @@ After you have installed and configured the Splunk JMX Add-On (see above) you ca
 ```
     $ /opt/splunk/bin/splunk restart
 ```
-
-### Work in Progress
-- [x] Add Diego Metrics
-
-
