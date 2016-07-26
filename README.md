@@ -32,9 +32,12 @@ After you have installed and configured the Splunk JMX Add-On (see above) you ca
     $ cp /opt/splunk/etc/apps/opsmetrics/default/data/ui/nav/default.xml default/data/ui/nav/default.xml
     $ cd /opt/splunk/etc/apps/Splunk_TA_jmx/local
     $ cp -R /opt/splunk/etc/apps/opsmetrics/local/data/ data/
+    $ rm -rf /opt/splunk/etc/apps/opsmetrics
+
 ```
 
 * Restart Splunk
 ```
     $ /opt/splunk/bin/splunk restart
 ```
+
