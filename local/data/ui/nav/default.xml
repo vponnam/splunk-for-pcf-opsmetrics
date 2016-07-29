@@ -2,17 +2,19 @@
 
 <view name="overall_health" default="true"/>
 <view name="search" default="false" label="Search" />
-
+<view name="alerts" default="false" label="Alerts" />
+<view name="dashboards" default="false" label="Dashboards" />
 <collection label="Health">
 <view name="cf_component_health" />
 <view name="vm_health" />
+#<view name="systemhealth" />
 </collection>
 
 <collection label="OS Metrics">
 <view name="os_metrics" />
 </collection>
 
-<collection label="Compenent Specific Metrics"> 
+<collection label="Compenent Specific Metrics">
   <view name="component_metrics_cc" />
   <view name="component_metrics_dea" />
   <view name="component_metrics_hm9000" />
@@ -28,10 +30,10 @@
   <view name="apps_instances" />
 </collection>
 
-<collection label="Documentation"> 
- 
-  <a href="/static/app/jmx_cf/docs/readme/README.md">User Guide</a> 
-  <a href="/static/app/jmx_cf/docs/configuration_schema/config.pdf">XML Configuration Schema Guide</a>   
+<collection label="Documentation">
+
+  <a href="/static/app/jmx_cf/docs/readme/README.md">User Guide</a>
+  <a href="/static/app/jmx_cf/docs/configuration_schema/config.pdf">XML Configuration Schema Guide</a>
   <a href="/static/app/jmx_cf/docs/javadoc/com/dtdsoftware/splunk/formatter/Formatter.html">Custom Formatter javadocs</a>
   <a href="http://en.wikipedia.org/wiki/Java_Management_Extensions">JMX Overview</a>
   <a href="http://download.oracle.com/javase/1.5.0/docs/guide/management/agent.html#remote">Enabling your target JVM</a>
@@ -48,3 +50,4 @@
 <view name="about"/>
 
 </nav>
+

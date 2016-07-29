@@ -1,59 +1,87 @@
-<?xml version="1.0"?><form>
-  <label>System Health</label>
-  <fieldset autoRun="true">
-    <input type="dropdown" token="jvmDescription">
-      <label>Choose JVM Description</label>
-      <prefix>jvmDescription="</prefix>
-      <suffix>"</suffix>
-      <choice value="*">All</choice>
-      <default>*</default>
-      <populatingSearch fieldForValue="jvmDescription" fieldForLabel="jvmDescription" earliest="-1d@d" latest="now">
-        <![CDATA[index=main | dedup jvmDescription | table jvmDescription]]>
-      </populatingSearch>
+<form script="table_row_highlighting.js" stylesheet="table_decorations.css">
+  <label>PCF System Health</label>
+  <fieldset autoRun="true" submitButton="false">
+    <input type="dropdown" token="prod" searchWhenChanged="true">
+      <label>Choose PCF Deployment</label>
+      <choice value="jmx_prod_*st">All</choice>
+      <choice value="jmx_prod_east">Azure Prod East</choice>
+      <choice value="jmx_prod_west">Azure Prod West</choice>
+      <initialValue>jmx_prod_*st</initialValue>
+      <default>jmx_prod_*st</default>
     </input>
-    <input type="time">
+    <input type="time" token="time" searchWhenChanged="true">
+      <label>Time Range</label>
       <default>
-        <earliestTime>rt-1h</earliestTime>
-        <latestTime>rt</latestTime>
+        <earliest>-15m</earliest>
+        <latest>now</latest>
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index system.healthy</searchTemplate>
+  <searchTemplate>index=$prod$ host="*" mbean_domain="org.cloudfoundry" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | rename system.healthy AS healthy | fields job_and_index healthy</searchTemplate>
+  <earliestTime>$time.earliest$</earliestTime>
+  <latestTime>$time.latest$</latestTime>
   <row>
-    <chart>
-      <title>System Health</title>
-      <search base="global">
-        <query>timechart avg(system.healthy) as "CF Health" by job_and_index useother=f limit=200</query>
-      </search>
-      <option name="charting.chart">line</option>
-      <option name="charting.chart.nullValueMode">connect</option>
-      <option name="charting.axisTitleX.text">Time</option>
-      <option name="charting.axisTitleY.text">Health</option>
-      <option name="charting.axisTitleX.visibility">visible</option>
-      <option name="charting.axisTitleY.visibility">visible</option>
-      <option name="charting.axisX.scale">linear</option>
-      <option name="charting.axisY.scale">linear</option>
-      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-      <option name="charting.chart.stackMode">default</option>
-      <option name="charting.chart.style">shiny</option>
-      <option name="charting.drilldown">all</option>
-      <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
-      <option name="charting.legend.placement">right</option>
-      <fields>["jvmDescription","source","sourcetype"]</fields>
-      <option name="charting.axisTitleY.text">Health</option>
-      <option name="charting.axisTitleX.text">Time</option>
-      <option name="height">600</option>
-      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-      <option name="charting.axisTitleY2.visibility">visible</option>
-      <option name="charting.axisY2.enabled">0</option>
-      <option name="charting.axisY2.scale">inherit</option>
-      <option name="charting.chart.bubbleMaximumSize">50</option>
-      <option name="charting.chart.bubbleMinimumSize">10</option>
-      <option name="charting.chart.bubbleSizeBy">area</option>
-      <option name="charting.chart.showDataLabels">none</option>
-      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
-    </chart>
+    <panel>
+      <chart>
+        <title>System Health</title>
+        <search base="global">
+          <query>timechart avg(healthy) as "System Health" by job_and_index useother=f limit=100</query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.text">Healthy</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>CPU Health</title>
+        <search>
+          <query>index=jmx_prod_*st host="*" mbean_domain="org.cloudfoundry" mbean_property_deployment="p-gemfire*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | rename system.cpu.sys AS system_cpu_sys | fields job_and_index system_cpu_sys | timechart avg(system_cpu_sys) as "CPU Health" by job_and_index useother=f limit=100</query>
+          <earliest>1461950679.000</earliest>
+          <latest>1461951579.000</latest>
+        </search>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table id="healthyhighlight">
+        <title>System Health for Past 15 mins</title>
+        <search>
+          <query>index=jmx_prod_east host="*" mbean_domain="org.cloudfoundry" earliest=-15m latest=now()| eval job_and_index = jvmDescription + "_" +mbean_property_job + "_" + mbean_property_index | rename system.healthy AS healthy | fields job_and_index healthy |timechart span=1d avg(healthy) as "System_Health" by job_and_index useother=f limit=100| untable _time job_and_index "System_Health" | eval status=if(System_Health==0, "UnHealthy", "Healthy") | table _time job_and_index System_Health status | sort status</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="wrap">undefined</option>
+        <option name="rowNumbers">undefined</option>
+        <option name="drilldown">row</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
   </row>
 </form>

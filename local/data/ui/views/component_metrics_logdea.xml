@@ -1,5 +1,5 @@
 <?xml version="1.0"?><form>
-  <label>Etcd</label>
+  <label>Loggregator MetronAgent</label>
   <fieldset autoRun="true" submitButton="false">
     <input type="dropdown" token="prod" searchWhenChanged="true">
       <label>Choose PCF Deployment</label>
@@ -17,13 +17,14 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=$prod$ host="*" mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-deployment" mbean_property_job="etcd" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index etcd.leader.Followers etcd.server.IsLeader etcd.server.RecievedAppendRequests etcd.server.RecievingBandwidthRate etcd.server.RecievingRequestRate etcd.server.SendingBandwidthRate etcd.server.SendingRequestRate etcd.server.SentAppendRequests</searchTemplate>
-<earliestTime>$time.earliest$</earliestTime>
+  <searchTemplate>index=$prod$ host="*" mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-deployment" mbean_property_job="*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index MetronAgent.numGoRoutines MetronAgent.dropsondeAgentListener.currentBufferCount MetronAgent.dropsondeAgentListener.receivedByteCount MetronAgent.dropsondeAgentListener.receivedMessageCount MetronAgent.dropsondeAgentListener.sentByteCount MetronAgent.dropsondeAgentListener.sentMessageCount MetronAgent.memoryStats.lastGCPauseTimeNS</searchTemplate>
+
+    <earliestTime>$time.earliest$</earliestTime>
   <latestTime>$time.latest$</latestTime>  
 <row>
     <chart>
-      <title>Etcd Leader Followers</title>
-      <searchPostProcess>timechart avg(etcd.leader.Followers) as "Followers" by job_and_index useother=f limit=200</searchPostProcess>
+      <title>Client Stats</title>
+      <searchPostProcess>timechart avg(MetronAgent.dropsondeAgentListener.currentBufferCount) as "Buffer Count" avg(MetronAgent.dropsondeAgentListener.receivedByteCount) as "Rx Bytes" avg(MetronAgent.dropsondeAgentListener.receivedMessageCount) as "Rx Messages" avg(MetronAgent.dropsondeAgentListener.sentByteCount) as "Tx Bytes" avg(MetronAgent.dropsondeAgentListener.sentMessageCount) as "Tx Messages" by job_and_index useother=f limit=51</searchPostProcess>
       <option name="charting.chart">line</option>
       <option name="charting.chart.nullValueMode">connect</option>
       <option name="charting.axisTitleX.text">Time</option>
@@ -43,8 +44,10 @@
   </row>
   <row>
     <chart>
-      <title>Etcd Leader</title>
-      <searchPostProcess>timechart avg(etcd.server.IsLeader) as "Etcd Leader" by job_and_index useother=f limit=200</searchPostProcess>
+      <title>GC Pause</title>
+      <searchPostProcess>eval GCPause=MetronAgent.memoryStats.lastGCPauseTimeNS/1000 | timechart avg(GCPause) as "GC Pause" by job_and_index useother=f limit=200</searchPostProcess>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -67,14 +70,14 @@
       <option name="table.drilldown">1</option>
       <option name="table.wrap">1</option>
       <option name="type">list</option>
-      <option name="charting.axisTitleY.text">true</option>
+      <option name="charting.axisTitleY.text">Ms</option>
       <option name="charting.axisTitleX.text">Time</option>
     </chart>
   </row>
   <row>
     <chart>
-      <title>Etcd Server Stats</title>
-      <searchPostProcess>timechart avg(etcd.server.RecievedAppendRequests) as "Rx Append Requets" avg(etcd.server.RecievingBandwidthRate) as "Rx BW Rate" avg(etcd.server.RecievingRequestRate) as "Rx Request Rate" avg(etcd.server.SendingBandwidthRate) as "Tx BW Rate" avg(etcd.server.SendingRequestRate) as "Tx Request Rate" avg(etcd.server.SentAppendRequests) as "Tx Append Requests" by job_and_index useother=f limit=200</searchPostProcess>
+      <title>Go Routines</title>
+      <searchPostProcess>timechart avg(MetronAgent.numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>

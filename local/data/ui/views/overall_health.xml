@@ -1,14 +1,22 @@
-<dashboard>
+<form>
   <label>Overall Health</label>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="radio" token="prod">
+      <label>Environment</label>
+      <choice value="jmx_prod_east">Azure Prod East</choice>
+      <choice value="jmx_prod_west">Azure Prod West</choice>
+    </input>
+  </fieldset>
   <row>
-    <panel>
-      <title>Frontend Health</title>
+    <panel> 
+     <title>Frontend Health</title>
       <single>
         <title>Router_Partition_24h</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=$prod$  host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
+          <option name="height">10</option>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -50,6 +58,7 @@
         <option name="trendInterval">-24h</option>
         <option name="underLabel">for past 24hrs</option>
         <option name="unitPosition">after</option>
+         <option name="refresh.auto.interval"> 10 </option>
       </single>
     </panel>
     <panel>
@@ -57,7 +66,7 @@
       <single>
         <title>Router_Partition_5m</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router-partition-*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=$prod$  host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -102,11 +111,41 @@
       </single>
     </panel>
     <panel>
+      <title>Router Request per Second</title>
+      <single>
+        <title>Router Req/s (5m)</title>
+        <search>
+          <query>index=$prod$ host="*"  router.requests_per_sec = * jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="router*" earliest=-5m latest=now| eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "router.total_requests" as total_requests | stats avg(total_requests) as sum_total_requests |eval sum=(sum_total_requests)/300 | table sum</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0x65a637","0x65a637"]</option>
+        <option name="rangeValues">[0,30,70,100]</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">per second</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+        <option name="unitPosition">after</option>
+        <option name="refresh.auto.interval"> 15 </option>
+      </single>
+    </panel>
+    <panel>
       <title>Backend Health</title>
       <single>
         <title>NATS_Partition_24hrs</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="nats-partition-*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=$prod$  host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="nats*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>0</earliest>
+          <latest></latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -132,7 +171,9 @@
       <single>
         <title>NATS_Partition</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="nats-partition-*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=$prod$  host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="nats*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>0</earliest>
+          <latest></latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -158,9 +199,11 @@
     <panel>
       <title>Frontend Health</title>
       <single>
-        <title>Diego_cell_partition_24h</title>
+        <title>DEA_24h</title>
         <search>
-          <query>index = main mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="diego_cell-partition-*" earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=$prod$ mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="DEA" earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d| stats avg(healthy) as system by _time| eval average=system*100 | table average</query>
+          <earliest>0</earliest>
+          <latest></latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -183,9 +226,11 @@
     <panel>
       <title>Frontend Health</title>
       <single>
-        <title>Diego_cell_partition_5m</title>
+        <title>DEA_5m</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="diego_cell-partition-*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=$prod$ mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="DEA" earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5m"), "Latest","Earliest") | bucket _time span=5m| stats avg(healthy) as system by _time| eval average=system*100 | table average</query>
+          <earliest>0</earliest>
+          <latest></latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -211,7 +256,7 @@
       <single>
         <title>Doppler_Partition_24hrs</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="doppler-partition-*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="doppler*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -237,7 +282,7 @@
       <single>
         <title>Doppler_Partition</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="doppler-partition-*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="doppler*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -261,12 +306,13 @@
   </row>
   <row>
     <panel>
+      <title>Frontend Health</title>
       <single>
-        <title>Router Req/s (5m)</title>
+        <title>API_24h</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf" mbean_property_job="*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "opentsdb.nozzle.router__0.total_requests" as total_requests| timechart span=1m sum(total_requests) as sum_total_requests | delta sum_total_requests p=1 as requests_per_min | eval requests_per_second = requests_per_min / 60 | stats last(requests_per_second) as requests_per_sec | table requests_per_sec</query>
-          <earliest>rt-5m</earliest>
-          <latest>rtnow</latest>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="api*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
@@ -277,42 +323,208 @@
         <option name="trendDisplayMode">absolute</option>
         <option name="useColors">1</option>
         <option name="useThousandSeparators">1</option>
-        <option name="rangeColors">["0xd93f3c","0xf7bc38","0x65a637"]</option>
-        <option name="rangeValues">[25,50]</option>
+        <option name="afterLabel">%</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c","0xf7bc38","0xf58f39","0x65a637"]</option>
+        <option name="rangeValues">[0,50,80,90]</option>
         <option name="trendInterval">auto</option>
-        <option name="underLabel">per second</option>
+        <option name="underLabel">for past 24hrs</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
-        <option name="unitPosition">after</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Frontend Health</title>
+      <single>
+        <title>API_5m</title>
+        <search>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="api*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="afterLabel">%</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c","0xf7bc38","0xf58f39","0x65a637"]</option>
+        <option name="rangeValues">[0,50,80,90]</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">for past 5mins</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Backend Health</title>
+      <single>
+        <title>HM9000_24h</title>
+        <search>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="HM9000*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="afterLabel">%</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c","0xf7bc38","0xf58f39","0x65a637"]</option>
+        <option name="rangeValues">[0,50,80,90]</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">for past 24hrs</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Backend Health</title>
+      <single>
+        <title>HM9000_5m</title>
+        <search>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="HM9000*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5min"), "Latest","Earliest") | bucket _time span=1min | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="afterLabel">%</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c","0xf7bc38","0xf58f39","0x65a637"]</option>
+        <option name="rangeValues">[0,50,80,90]</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">for past 5mins</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
       </single>
     </panel>
   </row>
   <row>
     <panel>
+      <title>Frontend Health</title>
       <single>
-        <title>API Req/s (5m)</title>
+        <title>UAA_24h</title>
         <search>
-          <query>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf"  mbean_property_job="*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | rename "opentsdb.nozzle.router__0.requests.CloudController" as cc_requests | timechart span=1m sum(cc_requests) as capi_requests | delta capi_requests p=1 as requests_per_min | eval requests_per_second = requests_per_min / 60 | stats last(requests_per_second) as requests_per_sec | table requests_per_sec</query>
-          <earliest>rt-5m</earliest>
-          <latest>rtnow</latest>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="uaadb_z1"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=2d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">block</option>
         <option name="numberPrecision">0.00</option>
-        <option name="rangeColors">["0xd93f3c","0xf7bc38","0x65a637"]</option>
-        <option name="rangeValues">[7,10]</option>
-        <option name="showSparkline">true</option>
-        <option name="showTrendIndicator">true</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
         <option name="trendColorInterpretation">standard</option>
         <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="afterLabel">%</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c","0xf7bc38","0xf58f39","0x65a637"]</option>
+        <option name="rangeValues">[0,50,80,90]</option>
         <option name="trendInterval">auto</option>
-        <option name="underLabel">per second</option>
-        <option name="useColors">true</option>
-        <option name="useThousandSeparators">true</option>
+        <option name="underLabel">for past 24hrs</option>
         <option name="linkView">search</option>
         <option name="drilldown">none</option>
-        <option name="unitPosition">after</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Frontend Health</title>
+      <single>
+        <title>UAA_5m</title>
+        <search>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="api*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5m"), "Latest","Earliest") | bucket _time span=5m | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="afterLabel">%</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c","0xf7bc38","0xf58f39","0x65a637"]</option>
+        <option name="rangeValues">[0,50,80,90]</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">for past 5mins</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Backend Health</title>
+      <single>
+        <title>ETCD_24h</title>
+        <search>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="ETCD*"  earliest=-1d latest=now() | eval Date=if(_time=relative_time(now(),"-1d"), "Latest","Earliest") | bucket _time span=1d | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="afterLabel">%</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c","0xf7bc38","0xf58f39","0x65a637"]</option>
+        <option name="rangeValues">[0,50,80,90]</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">for past 24hrs</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Backend Health</title>
+      <single>
+        <title>ETCD_5m</title>
+        <search>
+          <query>index=$prod$ host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-*" mbean_property_job="ETCD*"  earliest=-5m latest=now() | eval Date=if(_time=relative_time(now(),"-5m"), "Latest","Earliest") | bucket _time span=5m | stats avg(system.healthy) as system by _time | eval average=system*100 | table average</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="afterLabel">%</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c","0xf7bc38","0xf58f39","0x65a637"]</option>
+        <option name="rangeValues">[0,50,80,90]</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">for past 5mins</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
       </single>
     </panel>
   </row>
-</dashboard>
+  <row>
+    <panel></panel>
+  </row>
+</form>

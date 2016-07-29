@@ -1,0 +1,27 @@
+<form script="tables_row_highlighting.js" stylesheet="table_decorations.css">
+  <label>System_Health</label>
+  <fieldset submitButton="false">
+    <input type="radio" token="prod">
+      <label>Environment</label>
+      <choice value="jmx_prod_east">Azure Prod East</choice>
+      <choice value="jmx_prod_west">Azure Prod West</choice>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table id="highlighting">
+        <title>System Health for Past 30 mins</title>
+        <search>
+          <query>index=$prod$ host="*" mbean_domain="org.cloudfoundry" earliest=-30m latest=now()| eval job_and_index = jvmDescription + "_" +mbean_property_job + "_" + mbean_property_index | rename system.healthy AS healthy | fields job_and_index healthy |timechart span=1d avg(healthy) as "System_Health" by job_and_index useother=f limit=100| untable _time job_and_index "System_Health"</query>
+          <earliest>-30m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="wrap">undefined</option>
+        <option name="rowNumbers">undefined</option>
+        <option name="drilldown">row</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">100</option>
+      </table>
+    </panel>
+  </row>
+</form>

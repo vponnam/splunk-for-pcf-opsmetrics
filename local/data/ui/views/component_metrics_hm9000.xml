@@ -1,29 +1,28 @@
 <?xml version="1.0"?><form>
   <label>HM9000</label>
-  <fieldset autoRun="true">
-    <input type="dropdown" token="jvmDescription">
-      <label>Choose JVM Description</label>
-      <prefix>jvmDescription="</prefix>
-      <suffix>"</suffix>
-      <choice value="*">All</choice>
-      <default>*</default>
-      <populatingSearch fieldForValue="jvmDescription" fieldForLabel="jvmDescription" earliest="-1d@d" latest="now">
-        <![CDATA[index=main sourcetype=
-jmx | dedup jvmDescription | table jvmDescription]]>
-      </populatingSearch>
+  <fieldset autoRun="true" submitButton="false">
+    <input type="dropdown" token="prod" searchWhenChanged="true">
+      <label>Choose PCF Deployment</label>
+      <choice value="jmx_prod_*">All</choice>
+      <choice value="jmx_prod_east">Azure Prod East</choice>
+      <choice value="jmx_prod_west">Azure Prod West</choice>
+      <default>jmx_prod_*</default>
+      <initialValue>jmx_prod_*</initialValue>
     </input>
-    <input type="time">
+    <input type="time" token="time" searchWhenChanged="true">
+      <label>Time Range</label>
       <default>
-        <earliestTime>rt-1h</earliestTime>
-        <latestTime>rt</latestTime>
+        <earliest>-15m</earliest>
+        <latest>now</latest>
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=main sourcetype=jmx host="*" jvmDescription mbean_domain="org.cloudfoundry" mbean_property_deployment="untitled_dev" mbean_property_job="HM9000" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index + "_" + mbean_property_ip | fields job_and_index HM9000_HM9000_NumberOfRunningInstances HM9000_HM9000_NumberOfCrashedInstances HM9000_HM9000_NumberOfDesiredInstances HM9000_HM9000_NumberOfCrashedIndices HM9000_HM9000_NumberOfMissingIndices HM9000_HM9000_NumberOfAppsWithAllInstancesReporting HM9000_HM9000_NumberOfAppsWithMissingInstances HM9000_HM9000_NumberOfDesiredApps HM9000_HM9000_NumberOfDesiredAppsPendingStaging HM9000_HM9000_NumberOfUndesiredRunningApps HM9000_memoryStats_lastGCPauseTimeNS HM9000_numGoRoutines HM9000_HM9000_ReceivedHeartbeats HM9000_HM9000_SavedHeartbeats HM9000_HM9000_StartCrashed HM9000_HM9000_StartEvacuating HM9000_HM9000_StartMissing HM9000_HM9000_StopDuplicate HM9000_HM9000_StopEvacauationComplete HM9000_HM9000_StopExtra HM9000_HM9000_DesiredStateSyncTimeInMilliseconds HM9000_HM9000_ActualStateListenerStoreUsagePercentage</searchTemplate>
-  <row>
+  <searchTemplate>index=$prod$ host="*" mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-deployment" mbean_property_job="HM9000" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index HM9000.HM9000.NumberOfRunningInstances HM9000.HM9000.NumberOfCrashedInstances HM9000.HM9000.NumberOfDesiredInstances HM9000.HM9000.NumberOfCrashedIndices HM9000.HM9000.NumberOfMissingIndices HM9000.HM9000.NumberOfAppsWithAllInstancesReporting HM9000.HM9000.NumberOfAppsWithMissingInstances HM9000.HM9000.NumberOfDesiredApps HM9000.HM9000.NumberOfDesiredAppsPendingStaging HM9000.HM9000.NumberOfUndesiredRunningApps HM9000.memoryStats.lastGCPauseTimeNS HM9000.numGoRoutines HM9000.HM9000.ReceivedHeartbeats HM9000.HM9000.SavedHeartbeats HM9000.HM9000.StartCrashed HM9000.HM9000.StartEvacuating HM9000.HM9000.StartMissing HM9000.HM9000.StopDuplicate HM9000.HM9000.StopEvacauationComplete HM9000.HM9000.StopExtra HM9000.HM9000.DesiredStateSyncTimeInMilliseconds HM9000.HM9000.ActualStateListenerStoreUsagePercentage</searchTemplate>
+  <earliestTime>$time.earliest$</earliestTime>
+  <latestTime>$time.latest$</latestTime><row>
     <chart>
       <title>Instance Metrics</title>
-      <searchPostProcess>timechart avg(HM9000_HM9000_NumberOfRunningInstances) as "Running Instances" avg(HM9000_HM9000_NumberOfCrashedInstances) as "Crashed Instances" avg(HM9000_HM9000_NumberOfDesiredInstances) as "Desired Instances" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(HM9000.HM9000.NumberOfRunningInstances) as "Running Instances" avg(HM9000.HM9000.NumberOfCrashedInstances) as "Crashed Instances" avg(HM9000.HM9000.NumberOfDesiredInstances) as "Desired Instances" by job_and_index useother=f limit=200</searchPostProcess>
       <option name="charting.chart">line</option>
       <option name="charting.chart.nullValueMode">connect</option>
       <option name="charting.axisTitleX.text">Time</option>
@@ -44,7 +43,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
   <row>
     <chart>
       <title>Indices Metrics</title>
-      <searchPostProcess>timechart avg(HM9000_HM9000_NumberOfCrashedIndices) as "Crashed Indices" avg(HM9000_HM9000_NumberOfMissingIndices) as "Missing Indices" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(HM9000.HM9000.NumberOfCrashedIndices) as "Crashed Indices" avg(HM9000.HM9000.NumberOfMissingIndices) as "Missing Indices" by job_and_index useother=f limit=200</searchPostProcess>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -74,7 +73,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
   <row>
     <chart>
       <title>App Metrics</title>
-      <searchPostProcess>timechart avg(HM9000_HM9000_NumberOfAppsWithAllInstancesReporting) as "All Instances Reporting" avg(HM9000_HM9000_NumberOfAppsWithMissingInstances) as "Missing Instances" avg(HM9000_HM9000_NumberOfDesiredApps) as "Desired Apps" avg(HM9000_HM9000_NumberOfDesiredAppsPendingStaging) as "Pending Staging" avg(HM9000_HM9000_NumberOfUndesiredRunningApps) as "Undesired Apps" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(HM9000.HM9000.NumberOfAppsWithAllInstancesReporting) as "All Instances Reporting" avg(HM9000.HM9000.NumberOfAppsWithMissingInstances) as "Missing Instances" avg(HM9000.HM9000.NumberOfDesiredApps) as "Desired Apps" avg(HM9000.HM9000.NumberOfDesiredAppsPendingStaging) as "Pending Staging" avg(HM9000.HM9000.NumberOfUndesiredRunningApps) as "Undesired Apps" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
@@ -106,7 +105,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
   <row>
     <chart>
       <title>Command Metrics</title>
-      <searchPostProcess>timechart avg(HM9000_HM9000_ReceivedHeartbeats) as "Received Heartbeats" avg(HM9000_HM9000_SavedHeartbeats) as "Saved Heartbeats" avg(HM9000_HM9000_StartCrashed) as "Start Crashed" avg(HM9000_HM9000_StartEvacuating) as "Start Evacuating" avg(HM9000_HM9000_StartMissing) as "Start Missing" avg(HM9000_HM9000_StopDuplicate) as "Stop Duplicate" avg(HM9000_HM9000_StopEvacauationComplete) as "Stop Evac Complete" avg(HM9000_HM9000_StopExtra) as "Stop Extra" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(HM9000.HM9000.ReceivedHeartbeats) as "Received Heartbeats" avg(HM9000.HM9000.SavedHeartbeats) as "Saved Heartbeats" avg(HM9000.HM9000.StartCrashed) as "Start Crashed" avg(HM9000.HM9000.StartEvacuating) as "Start Evacuating" avg(HM9000.HM9000.StartMissing) as "Start Missing" avg(HM9000.HM9000.StopDuplicate) as "Stop Duplicate" avg(HM9000.HM9000.StopEvacauationComplete) as "Stop Evac Complete" avg(HM9000.HM9000.StopExtra) as "Stop Extra" by job_and_index useother=f limit=200</searchPostProcess>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -136,7 +135,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
   <row>
     <chart>
       <title>Resource Metrics</title>
-      <searchPostProcess>eval GCPause=(HM9000_memoryStats_lastGCPauseTimeNS/100000) | timechart avg(GCPause) as "GC ms" avg(HM9000_numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>eval GCPause=(HM9000.memoryStats.lastGCPauseTimeNS/100000) | timechart avg(GCPause) as "GC ms" avg(HM9000.numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -166,7 +165,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
   <row>
     <chart>
       <title>State Store Usage</title>
-      <searchPostProcess>timechart avg(HM9000_HM9000_ActualStateListenerStoreUsagePercentage) as "State Store Percent Used" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(HM9000.HM9000.ActualStateListenerStoreUsagePercentage) as "State Store Percent Used" by job_and_index useother=f limit=200</searchPostProcess>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -196,7 +195,7 @@ jmx | dedup jvmDescription | table jvmDescription]]>
   <row>
     <chart>
       <title>Desired State Sync Time</title>
-      <searchPostProcess>timechart avg(HM9000_HM9000_DesiredStateSyncTimeInMilliseconds) as "Sync Time" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(HM9000.HM9000.DesiredStateSyncTimeInMilliseconds) as "Sync Time" by job_and_index useother=f limit=200</searchPostProcess>
       <option name="charting.axisTitleX.visibility">visible</option>
       <option name="charting.axisTitleY.visibility">visible</option>
       <option name="charting.axisX.scale">linear</option>
@@ -223,5 +222,4 @@ jmx | dedup jvmDescription | table jvmDescription]]>
       <option name="charting.axisTitleX.text">Time</option>
     </chart>
   </row>
-
 </form>

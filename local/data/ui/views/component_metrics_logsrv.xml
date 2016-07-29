@@ -1,5 +1,5 @@
 <?xml version="1.0"?><form>
-  <label>Loggregator TrafficController</label>
+  <label>Doppler Server</label>
   <fieldset autoRun="true" submitButton="false">
     <input type="dropdown" token="prod" searchWhenChanged="true">
       <label>Choose PCF Deployment</label>
@@ -17,33 +17,31 @@
       </default>
     </input>
   </fieldset>
-  <searchTemplate>index=$prod$ host="*" mbean_domain="org.cloudfoundry" mbean_property_deployment="cf-deployment" mbean_property_job="LoggregatorTrafficcontroller" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | fields job_and_index LoggregatorTrafficcontroller.agentListener.currentBufferCount  LoggregatorTrafficcontroller.agentListener.receivedByteCount  LoggregatorTrafficcontroller.agentListener.receivedMessageCount LoggregatorTrafficcontroller.loggregatorClient.currentBufferCount LoggregatorTrafficcontroller.loggregatorClient.receivedByteCount LoggregatorTrafficcontroller.loggregatorClient.receivedMessageCount LoggregatorTrafficcontroller.loggregatorClient.sentByteCount LoggregatorTrafficcontroller.loggregatorClient.sentMessageCount LoggregatorTrafficcontroller.memoryStats.lastGCPauseTimeNS LoggregatorTrafficcontroller.numGoRoutines</searchTemplate>
-  <earliestTime>$time.earliest$</earliestTime>
-  <latestTime>$time.latest$</latestTime><row>
+  <searchTemplate>index=$prod$
+  host="*"
+mbean_domain="org.cloudfoundry"
+mbean_property_deployment="cf-deployment"
+mbean_property_job="DopplerServer"
+    | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index
+    | fields job_and_index
+      DopplerServer.messageRouter.numberOfDumpSinks
+      DopplerServer.messageRouter.numberOfSyslogSinks
+      DopplerServer.messageRouter.numberOfWebsocketSinks
+      DopplerServer.httpServer.numberOfMessagesDroppedInParseEnvelopes
+      DopplerServer.httpServer.numberOfMessagesUnmarshalErrorsInParseEnvelopes
+      DopplerServer.httpServer.numberOfMessagesUnmarshalledInParseEnvelopes
+      DopplerServer.numGoRoutines
+      DopplerServer.memoryStats.lastGCPauseTimeNS
+      DopplerServer.dropsondeListener.currentBufferCount
+      DopplerServer.dropsondeListener.receivedByteCount
+      DopplerServer.dropsondeListener.receivedMessageCount</searchTemplate>
+
+    <earliestTime>$time.earliest$</earliestTime>
+  <latestTime>$time.latest$</latestTime>  
+<row>
     <chart>
-      <title>Listener Stats</title>
-      <searchPostProcess>timechart avg(LoggregatorTrafficcontroller.agentListener.currentBufferCount) as "Buffer Count" avg(LoggregatorTrafficcontroller.agentListener.receivedByteCount) as "Rx Bytes" avg(LoggregatorTrafficcontroller.agentListener.receivedMessageCount) as "Rx Messages" by job_and_index useother=f limit=200</searchPostProcess>
-      <option name="charting.chart">line</option>
-      <option name="charting.chart.nullValueMode">connect</option>
-      <option name="charting.axisTitleX.text">Time</option>
-      <option name="charting.axisTitleY.text">Count</option>
-      <option name="charting.axisTitleX.visibility">visible</option>
-      <option name="charting.axisTitleY.visibility">visible</option>
-      <option name="charting.axisX.scale">linear</option>
-      <option name="charting.axisY.scale">linear</option>
-      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-      <option name="charting.chart.stackMode">default</option>
-      <option name="charting.chart.style">shiny</option>
-      <option name="charting.drilldown">all</option>
-      <option name="charting.layout.splitSeries">0</option>
-      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-      <option name="charting.legend.placement">right</option>
-    </chart>
-  </row>
-  <row>
-    <chart>
-      <title>Client Stats</title>
-      <searchPostProcess>timechart avg(LoggregatorTrafficcontroller.loggregatorClient.currentBufferCount) as "Buffer Count" avg(LoggregatorTrafficcontroller.loggregatorClient.receivedByteCount) as "Rx Bytes" avg(LoggregatorTrafficcontroller.loggregatorClient.receivedMessageCount) as "Rx Messages" avg(LoggregatorTrafficcontroller.loggregatorClient.sentByteCount) as "Tx Bytes" avg(LoggregatorTrafficcontroller.loggregatorClient.sentMessageCount) as "Tx Messages" by job_and_index useother=f limit=200</searchPostProcess>
+      <title>Agent Listener Stats</title>
+      <searchPostProcess>timechart avg(DopplerServer.dropsondeListener.currentBufferCount) as "Buffer Count" avg(DopplerServer.dropsondeListener.receivedByteCount) as "Rx Bytes" avg(DopplerServer.dropsondeListener.receivedMessageCount) as "Rx Messages" by job_and_index useother=f limit=200</searchPostProcess>
       <option name="charting.chart">line</option>
       <option name="charting.chart.nullValueMode">connect</option>
       <option name="charting.axisTitleX.text">Time</option>
@@ -64,7 +62,7 @@
   <row>
     <chart>
       <title>GC Pause</title>
-      <searchPostProcess>rename LoggregatorTrafficcontroller.memoryStats.lastGCPauseTimeNS as GCPause | eval lastGCPauseTimeSecnds = GCPause  /100000 | timechart avg(lastGCPauseTimeSecnds) as "GC Pause" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>rename DopplerServer.memoryStats.lastGCPauseTimeNS as GCPause | eval GCPause = GCPause/100000 | timechart avg(GCPause) as "GC Pause" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
@@ -96,7 +94,7 @@
   <row>
     <chart>
       <title>Go Routines</title>
-      <searchPostProcess>timechart avg(LoggregatorTrafficcontroller.numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
+      <searchPostProcess>timechart avg(DopplerServer.numGoRoutines) as "Go Routines" by job_and_index useother=f limit=200</searchPostProcess>
       <earliestTime>$earliest$</earliestTime>
       <latestTime>$latest$</latestTime>
       <option name="charting.axisTitleX.visibility">visible</option>
@@ -122,6 +120,72 @@
       <option name="table.wrap">1</option>
       <option name="type">list</option>
       <option name="charting.axisTitleY.text">Count</option>
+      <option name="charting.axisTitleX.text">Time</option>
+    </chart>
+  </row>
+  <row>
+    <chart>
+      <title>Http Server</title>
+      <searchPostProcess>rename DopplerServer.httpServer.numberOfMessagesDroppedInParseEnvelopes as numberOfMessagesDroppedInParseEnvelopes 
+       | rename DopplerServer.httpServer.numberOfMessagesUnmarshalErrorsInParseEnvelopes as numberOfMessagesUnmarshalErrorsInParseEnvelopes
+       | timechart avg(numberOfMessagesDroppedInParseEnvelopes) as "Drop Mx " avg( ) as "Mx Errors" avg(numberOfMessagesUnmarshalledInParseEnvelopes) as "Mx UnMarsh" by job_and_index useother=f limit=200</searchPostProcess>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">connect</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="count">10</option>
+      <option name="list.drilldown">full</option>
+      <option name="list.wrap">1</option>
+      <option name="maxLines">5</option>
+      <option name="raw.drilldown">full</option>
+      <option name="rowNumbers">0</option>
+      <option name="table.drilldown">1</option>
+      <option name="table.wrap">1</option>
+      <option name="type">list</option>
+      <option name="charting.axisTitleY.text">Messages</option>
+      <option name="charting.axisTitleX.text">Time</option>
+    </chart>
+  </row>
+  <row>
+    <chart>
+      <title>Message Router</title>
+      <searchPostProcess>timechart avg(DopplerServer.messageRouter.numberOfDumpSinks) as "Dump" avg(DopplerServer.messageRouter.numberOfSyslogSinks) as "Syslog" avg( DopplerServer.messageRouter.numberOfWebsocketSinks) as "Socket" by job_and_index useother=f limit=200</searchPostProcess>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">connect</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="count">10</option>
+      <option name="list.drilldown">full</option>
+      <option name="list.wrap">1</option>
+      <option name="maxLines">5</option>
+      <option name="raw.drilldown">full</option>
+      <option name="rowNumbers">0</option>
+      <option name="table.drilldown">1</option>
+      <option name="table.wrap">1</option>
+      <option name="type">list</option>
+      <option name="charting.axisTitleY.text">Sinks</option>
       <option name="charting.axisTitleX.text">Time</option>
     </chart>
   </row>

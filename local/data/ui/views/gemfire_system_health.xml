@@ -1,0 +1,60 @@
+<?xml version="1.0"?><form>
+  <label>GemFire System Health</label>
+  <fieldset autoRun="true" submitButton="false">
+    <input type="dropdown" token="prod" searchWhenChanged="true">
+      <label>Choose PCF Deployment</label>
+      <choice value="jmx_prod_*st">All</choice>
+      <choice value="jmx_prod_east">Azure Prod East</choice>
+      <choice value="jmx_prod_west">Azure Prod West</choice>
+      <initialValue>jmx_prod_*st</initialValue>
+      <default>jmx_prod_*st</default>
+    </input>
+    <input type="time" token="time" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-15m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <searchTemplate>index=$prod$ host="*" mbean_domain="org.cloudfoundry" mbean_property_deployment="p-gemfire*" | eval job_and_index = jvmDescription + "_" + mbean_property_job + "_" + mbean_property_index | rename system.healthy AS healthy | fields job_and_index healthy</searchTemplate>
+  <earliestTime>$time.earliest$</earliestTime>
+  <latestTime>$time.latest$</latestTime>
+  <row>
+    <chart>
+      <title>System Health</title>
+      <search base="global">
+        <query>timechart avg(healthy) as "System Health" by job_and_index useother=f limit=100</query>
+      </search>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">connect</option>
+      <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisTitleY.text">Healthy</option>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <fields>["jvmDescription","source","sourcetype"]</fields>
+      <option name="charting.axisTitleY.text">Healthy</option>
+      <option name="charting.axisTitleX.text">Time</option>
+      <option name="height">600</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+      <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+      <option name="charting.axisTitleY2.visibility">visible</option>
+      <option name="charting.axisY2.enabled">0</option>
+      <option name="charting.axisY2.scale">inherit</option>
+      <option name="charting.chart.bubbleMaximumSize">50</option>
+      <option name="charting.chart.bubbleMinimumSize">10</option>
+      <option name="charting.chart.bubbleSizeBy">area</option>
+      <option name="charting.chart.showDataLabels">none</option>
+      <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+    </chart>
+  </row>
+</form>
